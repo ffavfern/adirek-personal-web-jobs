@@ -1,27 +1,37 @@
+import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import { SiGmail } from "react-icons/si";
+
+
 
 
 function Contact() {
   return (
     <>
-    <section className="contact flex flex-col min-h-screen justify-center items-center">
-        <div className="flex title uppercase">get in touch</div>
-        <div className="flex form_and_socials flex-row justify-between">
-            <div className="flex form_contact w-full h-full border">
-                <form action="">
-                    <h6 className="uppercase">email</h6>
-                    <input type="email" name="email" id="email" />
-                    <h6 className="uppercase">message</h6>
-                    <input type="text" name="message" id="message" />
-                </form>
-            </div>
-            <div className="flex socials justify-between w-full">
-                <a href="#" className="facebook">facebook</a>
-                <a href="#" className="linkedin">linkedin</a>
-            </div>
+      <section className="contact  text-center pt-40">
+        <h1 className="uppercase font-bold text-4xl">get in touch</h1>
+        <div className="flex-row justify-between flex py-20 items-center ">
+          <div className="flex w-1/2 flex-col text-start leading-10">
+            <h3 className="uppercase">email</h3>
+            <input type="email" name="email" id="email" />
+            <h3 className="uppercase">message</h3>
+            <textarea
+              type="text"
+              name="message"
+              id="message"
+              className="h-36"
+            />
+          </div>
+          {/*socials*/}
+          <div className="flex w-1/2  text-center justify-between px-32">
+          <a href="#"><FaFacebook className="text-4xl "/></a>
+          <a href="#"><FaLinkedin className="text-4xl"/></a>
+          <a href="#"><SiGmail className="text-4xl"/></a>
+
+          </div>
         </div>
-    </section>
+      </section>
     </>
-  )
+  );
 }
 
-export default Contact
+export default Contact;

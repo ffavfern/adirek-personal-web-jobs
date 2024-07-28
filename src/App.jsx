@@ -6,11 +6,13 @@ import Blog from './components/Blog';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import Navbar from './components/Navbar';
 
 function App() {
   
   return (
     <>
+    <Navbar/>
       <Hero/>
       <div className="container mx-20 justify-center">
         <About/>
