@@ -1,21 +1,22 @@
-import  { useEffect } from 'react';
-import { gsap } from 'gsap';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 
-function ProjectsType() {
+const ProjectsType = () => {
   const projectTypes = [
     'การประกวดแข่งขัน',
     'งานวิจัยและการตีพิมพ์',
     'วิทยาการและผู้ทรงคุณวุฒิ',
     'รางวัลเชิดชูเกียรติ',
   ];
-  useEffect(() => {
-    gsap.from('.project-type', { opacity: 0, scale: 0.8, duration: 1, stagger: 0.2 });
-  }, []);
 
   return (
-    <>
-      <section id="projecttype" className="bg-secondary text-primary py-20">
-      <div className="container mx-auto text-center">
+    <section id="projecttype" className="bg-secondary text-primary py-20">
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.5 }}
+        className="container mx-auto text-center"
+      >
         <h2 className="text-4xl font-bold">Project Types</h2>
         <div className="flex flex-wrap justify-center mt-8">
           {projectTypes.map((type) => (
@@ -24,9 +25,8 @@ function ProjectsType() {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
-    </>
   );
 }
 

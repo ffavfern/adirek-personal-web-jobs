@@ -1,36 +1,38 @@
-import { useEffect } from 'react';
-import { gsap } from 'gsap';
 
-function Hero() {
-  
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore';
+
+const Hero = () => {
+  const [heroContent, setHeroContent] = useState(null);
+
   useEffect(() => {
-    gsap.from('.hero-text', { opacity: 0, y: 50, duration: 1 });
+    const fetchHeroContent = async () => {
+      const heroCollection = await getDocs(collection(db, 'hero'));
+      setHeroContent(heroCollection.docs[0].data());
+    };
+    fetchHeroContent();
   }, []);
-  return (
-    <>
-      <div
-        className="hero min-h-screen" 
-       // style={{
-         // backgroundImage:
-           // "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
-      //  }}
-      >
-        <div className="hero-overlay bg-opacity-60 bg-black"></div>
-        <div className="hero-content text-neutral-content text-center">
-          <div className="max-w-md hero-text">
-            <h1 className="mb-5 text-5xl font-bold uppercase">Adirek Nuansri</h1>
-            <h3 className="text-xl">Chinese Teacher</h3>
-            <p className="mb-5 text-xl">
-              experience 10 years +
-            </p>
-          </div>
 
-          {/*mouse scrolling animation */}
-          <div className="mouse-scrolling-animation"></div>
-        </div>
-      </div>
-    </>
+  if (!heroContent) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <section id="hero" className="hero-section bg-primary text-secondary py-20">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="container mx-auto p-6"
+      >
+        <h2 className="text-4xl font-bold mb-4">{heroContent.title}</h2>
+        <p className="text-lg">{heroContent.description}</p>
+        <img src={heroContent.image} alt={heroContent.title} className="w-full h-48 object-cover rounded-lg mt-4" />
+      </motion.div>
+    </section>
   );
-}
+};
 
 export default Hero;

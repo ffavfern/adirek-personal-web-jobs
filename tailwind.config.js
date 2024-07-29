@@ -1,10 +1,10 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+module.exports = {
+  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  darkMode: false, // or 'media' or 'class'
   theme: {
+    extend: {},
+  },
+  variants: {
     extend: {},
   },
   plugins: [require('daisyui')],
@@ -12,12 +12,11 @@ export default {
     themes: [
       {
         customtheme: {
-          "primary": "#000000", 
-          "secondary": "#ffffff", 
-          "error": "#dc2626", 
+          primary: '#000000',
+          secondary: '#ffffff',
+          error: '#dc2626',
         },
       },
     ],
   },
-  
-}
+};

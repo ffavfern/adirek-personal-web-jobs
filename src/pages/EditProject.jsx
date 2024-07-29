@@ -1,7 +1,7 @@
-import  { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const EditProject = () => {
@@ -10,21 +10,18 @@ const EditProject = () => {
     title: '',
     description: '',
     image: null,
-    imageUrl: '',
-    type: 'การประกวดแข่งขัน',
+    type: '',
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProject = async () => {
-      const projectDoc = await getDoc(doc(db, 'projects', id));
-      const projectData = projectDoc.data();
-      setFormData({
-        title: projectData.title,
-        description: projectData.description,
-        imageUrl: projectData.imageUrl || '',
-        type: projectData.type,
-      });
+      const docRef = doc(db, 'projects', id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setFormData(docSnap.data());
+      }
     };
     fetchProject();
   }, [id]);
@@ -39,106 +36,83 @@ const EditProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      let imageUrl = formData.imageUrl;
-      if (formData.image) {
+      let imageUrl = formData.image;
+      if (typeof formData.image === 'object') {
         const imageRef = ref(storage, `projects/${formData.image.name}`);
         await uploadBytes(imageRef, formData.image);
         imageUrl = await getDownloadURL(imageRef);
       }
-
       await updateDoc(doc(db, 'projects', id), {
-        title: formData.title,
-        description: formData.description,
-        imageUrl,
-        type: formData.type,
+        ...formData,
+        image: imageUrl,
       });
-
-      navigate('/manageProjects');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error updating project: ', error);
     }
+    setLoading(false);
   };
 
-  const projectTypes = [
-    'การประกวดแข่งขัน',
-    'งานวิจัยและการตีพิมพ์',
-    'วิทยาการและผู้ทรงคุณวุฒิ',
-    'รางวัลเชิดชูเกียรติ',
-  ];
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="card w-full max-w-sm shadow-2xl bg-base-100">
-        <div className="card-body">
-          <h2 className="card-title text-primary">Edit Project</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {['title', 'description'].map((field) => (
-              <div className="form-control" key={field}>
-                <label className="label" htmlFor={field}>
-                  <span className="label-text">Project {field.charAt(0).toUpperCase() + field.slice(1)}</span>
-                </label>
-                {field === 'description' ? (
-                  <textarea
-                    id={field}
-                    name={field}
-                    value={formData[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter project ${field}`}
-                    className="textarea textarea-bordered w-full"
-                    required
-                  ></textarea>
-                ) : (
-                  <input
-                    type="text"
-                    id={field}
-                    name={field}
-                    value={formData[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter project ${field}`}
-                    className="input input-bordered w-full"
-                    required
-                  />
-                )}
-              </div>
-            ))}
-            <div className="form-control">
-              <label className="label" htmlFor="image">
-                <span className="label-text">Project Image</span>
-              </label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                className="input input-bordered w-full"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label" htmlFor="type">
-                <span className="label-text">Project Type</span>
-              </label>
-              <select
-                id="type"
-                name="type"
-                value={formData.type}
-                onChange={handleChange}
-                className="select select-bordered w-full"
-              >
-                {projectTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-control mt-6">
-              <button type="submit" className="btn btn-primary w-full">Update Project</button>
-            </div>
-          </form>
+    <div className="container mx-auto py-12">
+      <h1 className="text-3xl font-bold mb-6">Edit Project</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="title">Title</label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
         </div>
-      </div>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="description">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="textarea textarea-bordered w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="image">Image</label>
+          <input
+            type="file"
+            name="image"
+            id="image"
+            onChange={handleChange}
+            className="input input-bordered w-full"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="type">Type</label>
+          <select
+            name="type"
+            id="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+          >
+            <option value="">Select Type</option>
+            <option value="การประกวดแข่งขัน">การประกวดแข่งขัน</option>
+            <option value="งานวิจัยและการตีพิมพ์">งานวิจัยและการตีพิมพ์</option>
+            <option value="วิทยาการและผู้ทรงคุณวุฒิ">วิทยาการและผู้ทรงคุณวุฒิ</option>
+            <option value="รางวัลเชิดชูเกียรติ">รางวัลเชิดชูเกียรติ</option>
+          </select>
+        </div>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Updating...' : 'Update Project'}
+        </button>
+      </form>
     </div>
   );
 };
