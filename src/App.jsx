@@ -1,31 +1,50 @@
-import Hero from './components/Hero';
-import About from './components/About';
-import ProjectSlide from './components/ProjectSlide';
-import ProjectType from './components/ProjectsType';
-import Blog from './components/Blog';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import ManageProjects from './pages/ManageProjects';
+import AddProject from './pages/AddProject';
+import EditProject from './pages/EditProject';
+import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
-  
   return (
-    <>
-    <Navbar/>
-      <Hero/>
-      <div className="container mx-20 justify-center">
-        <About/>
-        <ProjectSlide/>
-        <ProjectType/>
-        <Blog/>
-        <hr />
-        <Testimonials/>
-        <Contact/>
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/manageProjects"
+            element={
+              <ProtectedRoute>
+                <ManageProjects />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/addProject"
+            element={
+              <ProtectedRoute>
+                <AddProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editProject/:id"
+            element={
+              <ProtectedRoute>
+                <EditProject />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+        <Footer />
       </div>
-      <Footer/>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
