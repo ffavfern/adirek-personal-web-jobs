@@ -1,33 +1,29 @@
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-
-  const handleLogin = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        navigate('/dashboard');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
-      <div className="card w-96 bg-secondary shadow-xl login-form ">
-        <div className="card-body ">
-          <h2 className="card-title mb-5">Login</h2>
-          <form onSubmit={handleLogin} className="space-y-4 ">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="card w-96 bg-base-100 shadow-xl login-form">
+        <div className="card-body">
+          <h2 className="card-title">Login</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="email"
               value={email}

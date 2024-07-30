@@ -6,7 +6,7 @@ import Education from './Education';
 
 const About = () => {
   return (
-    <section className="about flex flex-col md:flex-row justify-between py-20 md:py-60 items-start gap-4">
+    <section className="about flex flex-col md:flex-row justify-between py-20 md:py-60 items-start gap-10">
       <motion.div
         className="experience flex flex-col w-full md:w-1/3"
         initial={{ opacity: 0, x: -50 }}
@@ -32,7 +32,7 @@ const About = () => {
         </a>
       </motion.div>
       <motion.div
-        className="education flex flex-col w-full md:w-1/3 p-10"
+        className="education flex flex-col w-full md:w-1/3"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}

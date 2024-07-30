@@ -1,22 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Footer from './components/Footer';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import ManageProjects from './pages/ManageProjects';
-import ManageBlog from './pages/ManageBlog';
-import ManageTestimonials from './pages/ManageTestimonials';
-import ManageHero from './pages/ManageHero';
-import ManageAbout from './pages/ManageAbout';
-import ManageContact from './pages/ManageContact';
-import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient,QueryClientProvider, } from '@tanstack/react-query'
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import ManageProjects from "./pages/ManageProjects";
+import ManageBlogs from "./pages/ManageBlogs";
+import ManageAdmin from "./pages/ManageAdmin";
+import ManageHero from "./pages/ManageHero";
+import ManageExperience from "./pages/ManageExperience";
+import ManageEducation from "./pages/ManageEducation";
+import ManageTestimonials from "./pages/ManageTestimonials";
+import ManageContact from "./pages/ManageContact";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
+
+const queryClient = new QueryClient()
+
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div>
+    <QueryClientProvider client={queryClient}>
+
+      <AuthProvider>
+        
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -29,7 +35,7 @@ function App() {
               }
             />
             <Route
-              path="/manage-projects"
+              path="/dashboard/projects"
               element={
                 <ProtectedRoute>
                   <ManageProjects />
@@ -37,23 +43,23 @@ function App() {
               }
             />
             <Route
-              path="/manage-blog"
+              path="/dashboard/blogs"
               element={
                 <ProtectedRoute>
-                  <ManageBlog />
+                  <ManageBlogs />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/manage-testimonials"
+              path="/dashboard/admin"
               element={
                 <ProtectedRoute>
-                  <ManageTestimonials />
+                  <ManageAdmin />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/manage-hero"
+              path="/dashboard/hero"
               element={
                 <ProtectedRoute>
                   <ManageHero />
@@ -61,15 +67,31 @@ function App() {
               }
             />
             <Route
-              path="/manage-about"
+              path="/dashboard/experience"
               element={
                 <ProtectedRoute>
-                  <ManageAbout />
+                  <ManageExperience />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/manage-contact"
+              path="/dashboard/education"
+              element={
+                <ProtectedRoute>
+                  <ManageEducation />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/testimonials"
+              element={
+                <ProtectedRoute>
+                  <ManageTestimonials />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/contact"
               element={
                 <ProtectedRoute>
                   <ManageContact />
@@ -77,10 +99,11 @@ function App() {
               }
             />
           </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </AuthProvider>
+        
+      </AuthProvider>
+      </QueryClientProvider>
+
+    
   );
 }
 
