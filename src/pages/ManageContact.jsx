@@ -1,84 +1,111 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import ContentCard from '../components/ContentCard';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
 const ManageContact = () => {
-  const [contacts, setContacts] = useState([]);
-  const [newContact, setNewContact] = useState({
+  const [contactDetails, setContactDetails] = useState({
     email: '',
-    message: '',
+    location: '',
+    phone: '',
   });
-  const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const docRef = doc(db, 'siteInfo', 'contactDetails');
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      const contactsCollection = await getDocs(collection(db, 'contact'));
-      setContacts(contactsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    };
-    fetchContacts();
+    fetchContactDetails();
   }, []);
 
-  const handleAddOrUpdateContact = async (e) => {
-    e.preventDefault();
-    if (editingId) {
-      await updateDoc(doc(db, 'contact', editingId), newContact);
-      setEditingId(null);
-    } else {
-      await addDoc(collection(db, 'contact'), newContact);
+  const fetchContactDetails = async () => {
+    try {
+      console.log("Fetching contact details from Firebase...");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("Contact details found:", docSnap.data());
+        setContactDetails(docSnap.data());
+      } else {
+        console.log('No such document! Creating one...');
+        await setDoc(docRef, { email: '', location: '', phone: '' }); // Creates the document with default values
+        setContactDetails({ email: '', location: '', phone: '' });
+      }
+    } catch (err) {
+      setError('Failed to fetch contact details.');
+      console.error('Error fetching contact details:', err.message);
     }
-    setNewContact({ email: '', message: '' });
-    const contactsCollection = await getDocs(collection(db, 'contact'));
-    setContacts(contactsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   };
 
-  const handleEditContact = (contact) => {
-    setNewContact({ email: contact.email, message: contact.message });
-    setEditingId(contact.id);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setContactDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
   };
 
-  const handleDeleteContact = async (id) => {
-    await deleteDoc(doc(db, 'contact', id));
-    setContacts(contacts.filter((contact) => contact.id !== id));
+  const handleSaveDetails = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      await updateDoc(docRef, contactDetails);
+      console.log('Contact details updated:', contactDetails);
+      alert('Contact details updated successfully!');
+    } catch (err) {
+      setError('Failed to update contact details.');
+      console.error('Error updating contact details:', err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Contact</h2>
+      <h2 className="text-4xl font-bold mb-8">Manage Contact Details</h2>
       <Link to="/dashboard">
         <button className="btn btn-primary mb-4">Back to Dashboard</button>
       </Link>
-      <form onSubmit={handleAddOrUpdateContact} className="mb-4">
-        <input
-          type="email"
-          value={newContact.email}
-          onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-          placeholder="Email"
-          className="input input-bordered w-full mb-2"
-          required
-        />
-        <textarea
-          value={newContact.message}
-          onChange={(e) => setNewContact({ ...newContact, message: e.target.value })}
-          placeholder="Message"
-          className="textarea textarea-bordered w-full mb-2"
-          required
-        />
-        <button type="submit" className="btn btn-primary w-full">
-          {editingId ? 'Update Contact' : 'Add Contact'}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      <form onSubmit={handleSaveDetails} className="mb-4">
+        <div className="mb-4">
+          <label htmlFor="email" className="block mb-2">Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={contactDetails.email}
+            onChange={handleInputChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="location" className="block mb-2">Location:</label>
+          <input
+            type="text"
+            name="location"
+            value={contactDetails.location}
+            onChange={handleInputChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="phone" className="block mb-2">Phone:</label>
+          <input
+            type="text"
+            name="phone"
+            value={contactDetails.phone}
+            onChange={handleInputChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+        <button type="submit" className={`btn btn-primary w-full ${loading ? 'opacity-50' : ''}`} disabled={loading}>
+          {loading ? 'Saving...' : 'Save Details'}
         </button>
       </form>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {contacts.map((contact) => (
-          <ContentCard
-            key={contact.id}
-            {...contact}
-            onDelete={() => handleDeleteContact(contact.id)}
-            onUpdate={() => handleEditContact(contact)}
-          />
-        ))}
-      </div>
     </div>
   );
 };

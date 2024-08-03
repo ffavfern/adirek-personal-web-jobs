@@ -1,43 +1,96 @@
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { motion } from 'framer-motion';
+import './Testimonials.css'
+
+const fetchTestimonials = async () => {
+  const testimonialsCollection = await getDocs(collection(db, 'testimonials'));
+  return testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
 
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
-      const testimonialsCollection = await getDocs(collection(db, 'testimonials'));
-      setTestimonials(testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    const fetchData = async () => {
+      const data = await fetchTestimonials();
+      setTestimonials(data);
     };
-    fetchTestimonials();
+    fetchData();
   }, []);
 
   return (
-    <section id="testimonials" className="bg-secondary text-primary py-20">
+    <section id="testimonials" className="bg-secondary py-20">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
-        className="container mx-auto text-center"
+        className="container mx-auto "
       >
-        <h2 className="text-4xl font-bold">Testimonials</h2>
-        <Swiper spaceBetween={50} slidesPerView={1}>
-          {testimonials.map((testimonial) => (
-            <SwiperSlide key={testimonial.id}>
-              <div className="p-4 bg-primary rounded-lg">
-                <h3 className="text-2xl font-bold">{testimonial.name}</h3>
-                <p className="mt-2">{testimonial.feedback}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <h2 className="text-4xl font-bold text-center mb-8">What our Clients say!</h2>
+        <div className="flex justify-center mb-12">
+          <hr className="w-24 border-b-4 border-red-500 mb-10" />
+        </div>
+        <TestimonialsSwiper  testimonials={testimonials} />
       </motion.div>
     </section>
   );
 };
+
+const TestimonialsSwiper = ({ testimonials }) => (
+  <Swiper
+    spaceBetween={50}
+    slidesPerView={3}
+    pagination={{ clickable: true }}
+    modules={[Pagination]}
+    className="pb-10 justify-center"
+    breakpoints={{
+      640: {
+        slidesPerView: 1,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 40,
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 50,
+      },
+    }}
+  >
+    {testimonials.map((testimonial) => (
+      <SwiperSlide key={testimonial.id}>
+        <TestimonialCard testimonial={testimonial} />
+      </SwiperSlide>
+    ))}
+  </Swiper>
+);
+
+const TestimonialCard = ({ testimonial }) => (
+  <div className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-center text-center mx-4">
+    {testimonial.profileImageUrl && (
+      <ProfileImage src={testimonial.profileImageUrl} alt={testimonial.name} />
+    )}
+    <h3 className="text-xl font-semibold mb-2">{testimonial.name}</h3>
+    {testimonial.position && <p className="text-sm text-gray-500 mb-4">{testimonial.position}</p>}
+    <p className="mb-6 text-base text-gray-700">"{testimonial.feedback}"</p>
+  </div>
+);
+
+const ProfileImage = ({ src, alt }) => (
+  <div className="w-16 h-16 rounded-full overflow-hidden mb-4 border-2 border-gray-300">
+    <img 
+      src={src} 
+      alt={alt} 
+      className="object-cover w-full h-full"
+    />
+  </div>
+);
 
 export default Testimonials;

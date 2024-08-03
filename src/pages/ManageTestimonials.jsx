@@ -1,46 +1,98 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import ContentCard from '../components/ContentCard';
 import { Link } from 'react-router-dom';
 
 const ManageTestimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
-  const [newTestimonial, setNewTestimonial] = useState({
-    name: '',
-    feedback: '',
-  });
+  const [filteredTestimonials, setFilteredTestimonials] = useState([]);
+  const [newTestimonial, setNewTestimonial] = useState({ name: '', feedback: '', rating: 0, profileImageUrl: '' });
+  const [searchTerm, setSearchTerm] = useState('');
   const [editingId, setEditingId] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       const testimonialsCollection = await getDocs(collection(db, 'testimonials'));
-      setTestimonials(testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      const testimonialsData = testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setTestimonials(testimonialsData);
+      setFilteredTestimonials(testimonialsData);
     };
     fetchTestimonials();
   }, []);
 
   const handleAddOrUpdateTestimonial = async (e) => {
     e.preventDefault();
+
+    let imageUrl = newTestimonial.profileImageUrl;
+    if (profileImage) {
+      const storage = getStorage();
+      const imageRef = ref(storage, `profileImages/${profileImage.name}`);
+      await uploadBytes(imageRef, profileImage);
+      imageUrl = await getDownloadURL(imageRef);
+    }
+
+    const testimonialData = {
+      ...newTestimonial,
+      profileImageUrl: imageUrl,
+    };
+
     if (editingId) {
-      await updateDoc(doc(db, 'testimonials', editingId), newTestimonial);
+      await updateDoc(doc(db, 'testimonials', editingId), testimonialData);
       setEditingId(null);
     } else {
-      await addDoc(collection(db, 'testimonials'), newTestimonial);
+      await addDoc(collection(db, 'testimonials'), testimonialData);
     }
-    setNewTestimonial({ name: '', feedback: '' });
+    
+    setNewTestimonial({ name: '', feedback: '', rating: 0, profileImageUrl: '' });
+    setProfileImage(null);
     const testimonialsCollection = await getDocs(collection(db, 'testimonials'));
-    setTestimonials(testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    const testimonialsData = testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setTestimonials(testimonialsData);
+    setFilteredTestimonials(testimonialsData);
   };
 
   const handleEditTestimonial = (testimonial) => {
-    setNewTestimonial({ name: testimonial.name, feedback: testimonial.feedback });
+    setNewTestimonial({
+      name: testimonial.name,
+      feedback: testimonial.feedback,
+      rating: testimonial.rating,
+      profileImageUrl: testimonial.profileImageUrl || ''
+    });
     setEditingId(testimonial.id);
   };
 
   const handleDeleteTestimonial = async (id) => {
-    await deleteDoc(doc(db, 'testimonials', id));
-    setTestimonials(testimonials.filter((testimonial) => testimonial.id !== id));
+    if (window.confirm('Are you sure you want to delete this testimonial?')) {
+      await deleteDoc(doc(db, 'testimonials', id));
+      setTestimonials(testimonials.filter((testimonial) => testimonial.id !== id));
+      setFilteredTestimonials(filteredTestimonials.filter((testimonial) => testimonial.id !== id));
+    }
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    const filtered = testimonials.filter((testimonial) =>
+      testimonial.name.toLowerCase().includes(value) || testimonial.feedback.toLowerCase().includes(value)
+    );
+    setFilteredTestimonials(filtered);
+  };
+
+  const handleResetForm = () => {
+    setNewTestimonial({ name: '', feedback: '', rating: 0, profileImageUrl: '' });
+    setProfileImage(null);
+    setEditingId(null);
+  };
+
+  const handleRatingChange = (rating) => {
+    setNewTestimonial({ ...newTestimonial, rating });
+  };
+
+  const handleProfileImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
   };
 
   return (
@@ -49,6 +101,15 @@ const ManageTestimonials = () => {
       <Link to="/dashboard">
         <button className="btn btn-primary mb-4">Back to Dashboard</button>
       </Link>
+      
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleSearch}
+        placeholder="Search testimonials..."
+        className="input input-bordered w-full mb-4"
+      />
+
       <form onSubmit={handleAddOrUpdateTestimonial} className="mb-4">
         <input
           type="text"
@@ -65,20 +126,73 @@ const ManageTestimonials = () => {
           className="textarea textarea-bordered w-full mb-2"
           required
         />
-        <button type="submit" className="btn btn-primary w-full">
-          {editingId ? 'Update Testimonial' : 'Add Testimonial'}
-        </button>
-      </form>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {testimonials.map((testimonial) => (
-          <ContentCard
-            key={testimonial.id}
-            {...testimonial}
-            onDelete={() => handleDeleteTestimonial(testimonial.id)}
-            onUpdate={() => handleEditTestimonial(testimonial)}
+        <div className="flex items-center mb-4">
+          <span className="mr-2">Rating:</span>
+          <StarRating rating={newTestimonial.rating} onRatingChange={handleRatingChange} />
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2">Profile Image:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleProfileImageChange}
+            className="input input-bordered w-full"
           />
-        ))}
-      </div>
+        </div>
+        <div className="flex justify-between">
+          <button type="submit" className="btn btn-primary w-1/2 mr-2">
+            {editingId ? 'Update Testimonial' : 'Add Testimonial'}
+          </button>
+          <button type="button" onClick={handleResetForm} className="btn btn-secondary w-1/2 ml-2">
+            Reset Form
+          </button>
+        </div>
+      </form>
+      
+      {filteredTestimonials.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredTestimonials.map((testimonial) => (
+            <ContentCard
+              key={testimonial.id}
+              {...testimonial}
+              onDelete={() => handleDeleteTestimonial(testimonial.id)}
+              onUpdate={() => handleEditTestimonial(testimonial)}
+            />
+          ))}
+        </div>
+      ) : (
+        <p>No testimonials found.</p>
+      )}
+    </div>
+  );
+};
+
+// StarRating component for selecting ratings
+const StarRating = ({ rating, onRatingChange }) => {
+  const handleClick = (newRating) => {
+    onRatingChange(newRating);
+  };
+
+  return (
+    <div className="flex">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <svg
+          key={star}
+          onClick={() => handleClick(star)}
+          xmlns="http://www.w3.org/2000/svg"
+          fill={star <= rating ? "gold" : "none"}
+          stroke="gold"
+          strokeWidth="2"
+          className="w-6 h-6 cursor-pointer"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.716 5.29a1 1 0 00.95.69h5.564c.969 0 1.371 1.24.588 1.81l-4.498 3.256a1 1 0 00-.364 1.118l1.716 5.29c.3.922-.755 1.688-1.54 1.118L12 17.77l-4.497 3.256c-.784.57-1.84-.196-1.54-1.118l1.716-5.29a1 1 0 00-.364-1.118L2.818 10.72c-.784-.57-.38-1.81.588-1.81h5.564a1 1 0 00.95-.69l1.716-5.29z"
+          />
+        </svg>
+      ))}
     </div>
   );
 };

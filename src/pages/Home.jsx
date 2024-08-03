@@ -9,8 +9,14 @@ import ProjectsType from '../components/ProjectsType';
 import Blog from '../components/Blog';
 import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
+import Footer from '../components/Footer';
 
-function Home() {
+const fetchCollectionData = async (collectionName) => {
+  const collectionSnapshot = await getDocs(collection(db, collectionName));
+  return collectionSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+const Home = () => {
   const [heroContent, setHeroContent] = useState({});
   const [aboutContent, setAboutContent] = useState({});
   const [blogPosts, setBlogPosts] = useState([]);
@@ -18,15 +24,23 @@ function Home() {
 
   useEffect(() => {
     const fetchContent = async () => {
-      const heroDoc = await getDocs(collection(db, 'hero'));
-      setHeroContent(heroDoc.docs[0].data());
-      const aboutDoc = await getDocs(collection(db, 'about'));
-      setAboutContent(aboutDoc.docs[0].data());
-      const blogCollection = await getDocs(collection(db, 'blog'));
-      setBlogPosts(blogCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      const testimonialsCollection = await getDocs(collection(db, 'testimonials'));
-      setTestimonials(testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      try {
+        const [hero, about, blog, testimonials] = await Promise.all([
+          fetchCollectionData('hero'),
+          fetchCollectionData('about'),
+          fetchCollectionData('blog'),
+          fetchCollectionData('testimonials'),
+        ]);
+
+        setHeroContent(hero[0] || {});
+        setAboutContent(about[0] || {});
+        setBlogPosts(blog);
+        setTestimonials(testimonials);
+      } catch (error) {
+        console.error('Error fetching content:', error);
+      }
     };
+
     fetchContent();
   }, []);
 
@@ -43,10 +57,12 @@ function Home() {
           <hr className="w-1/2" />
         </div>
         <Testimonials testimonials={testimonials} />
-        <Contact />
+        
       </div>
+      <Contact />
+      <Footer/>
     </>
   );
-}
+};
 
 export default Home;
