@@ -34,7 +34,7 @@ const Blog = () => {
   return (
     <section id="blog" className="text-secondary py-20">
       <div className="container mx-auto text-start">
-        <BlogGrid blogs={blogs} />
+         <BlogGrid blogs={blogs} />
       </div>
     </section>
   );

@@ -13,6 +13,8 @@ import ManageTestimonials from "./pages/ManageTestimonials";
 import ManageContact from "./pages/ManageContact";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import ProjectDetail from './pages/ProjectDetail'; // The new component we'll create
+
 
 const queryClient = new QueryClient()
 
@@ -98,6 +100,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+                   <Route path="/projects/:id" component={ProjectDetail} />
+
           </Routes>
         
       </AuthProvider>

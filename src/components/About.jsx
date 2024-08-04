@@ -13,7 +13,7 @@ const About = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}
       >
-        <h1 className="uppercase font-bold text-4xl">Experience</h1>
+        <h1 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest">Experience</h1>
         <Experience />
       </motion.div>
       <motion.div
@@ -37,7 +37,7 @@ const About = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}
       >
-        <h1 className="uppercase text-4xl font-bold">Education</h1>
+        <h1 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest">Education</h1>
         <Education />
       </motion.div>
     </section>

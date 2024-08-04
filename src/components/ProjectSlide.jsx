@@ -7,7 +7,8 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom'; // Import Link from React Router
+import { Link } from 'react-router-dom'; 
+
 
 const ProjectSlide = ({ id }) => {
   const [projects, setProjects] = useState([]);
@@ -21,14 +22,14 @@ const ProjectSlide = ({ id }) => {
   }, []);
 
   return (
-    <section id={id} className="project-slide-section py-24">
+    <section id={id} className="project-slide-section ">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
         className="container mx-auto p-6"
       >
-        <h2 className="text-5xl font-serif font-bold mb-14 text-gold uppercase tracking-widest">Our Projects</h2>
+        <h2 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest pb-10">Our Projects</h2>
         <Swiper
           spaceBetween={30}
           slidesPerView={1}
@@ -42,9 +43,9 @@ const ProjectSlide = ({ id }) => {
           modules={[Navigation, Pagination]}
         >
           {projects.map(project => (
-            <SwiperSlide key={project.id}>
-              <Link to={`/projects/${project.id}`} className="block"> {/* Wrap the content in a Link component */}
-                <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group">
+            <SwiperSlide key={project.id} className='size-card'>
+              <Link to={`/projects/${project.id}`} className="block "> 
+                <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group  ">
                   {project.images && project.images.length > 0 && (
                     <img 
                       src={project.images[0]} 
@@ -54,7 +55,7 @@ const ProjectSlide = ({ id }) => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>
                   <div className="absolute inset-0 p-6 flex flex-col justify-end transition-opacity">
-                    <h3 className="text-3xl font-serif font-semibold mb-4 text-white uppercase">{project.title}</h3>
+                    <h3 className="text-3xl  font-semibold mb-4 text-white uppercase">{project.title}</h3>
                     <p className="text-lg text-gray-400 uppercase">{project.description}</p>
                   </div>
                 </div>

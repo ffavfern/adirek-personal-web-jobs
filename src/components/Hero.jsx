@@ -28,7 +28,7 @@ const Hero = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto p-6 "
       >
-        <h2 className="text-4xl font-bold mb-4 text-secondary uppercase">{heroContent.title}</h2>
+        <h2 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest">{heroContent.title}</h2>
         <p className="text-lg text-secondary uppercase">{heroContent.subtitle}</p>
         <p className="text-md text-paragraph uppercase">{heroContent.description}</p>
         <div className="scroll-mouse mt-20"></div>

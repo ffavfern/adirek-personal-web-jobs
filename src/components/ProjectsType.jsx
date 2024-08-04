@@ -50,7 +50,7 @@ const ProjectsType = () => {
   };
 
   return (
-    <section id="projecttype" className="bg-secondary text-primary py-60">
+    <section id="projecttype" className="bg-secondary text-primary pt-10 pb-60">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
