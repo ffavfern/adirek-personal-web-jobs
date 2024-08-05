@@ -9,7 +9,6 @@ import { collection, getDocs } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom'; 
 
-
 const ProjectSlide = ({ id }) => {
   const [projects, setProjects] = useState([]);
 
@@ -45,17 +44,17 @@ const ProjectSlide = ({ id }) => {
           {projects.map(project => (
             <SwiperSlide key={project.id} className='size-card'>
               <Link to={`/projects/${project.id}`} className="block "> 
-                <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group  ">
+                <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group">
                   {project.images && project.images.length > 0 && (
                     <img 
                       src={project.images[0]} 
                       alt={project.title} 
-                      className="w-full h-96 object-cover transition-transform transform group-hover:scale-105" 
+                      className="w-full h-64 object-cover transition-transform transform group-hover:scale-105" // Adjusted height to h-64 for landscape
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>
                   <div className="absolute inset-0 p-6 flex flex-col justify-end transition-opacity">
-                    <h3 className="text-3xl  font-semibold mb-4 text-white uppercase">{project.title}</h3>
+                    <h3 className="text-3xl font-semibold mb-4 text-white uppercase">{project.title}</h3>
                     <p className="text-lg text-gray-400 uppercase">{project.description}</p>
                   </div>
                 </div>

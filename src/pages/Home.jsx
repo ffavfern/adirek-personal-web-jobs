@@ -52,6 +52,7 @@ const Home = () => {
         <About content={aboutContent} />
         <ProjectSlide id="projectslide" />
         <ProjectsType />
+        
         <Blog posts={blogPosts} />
         <div className="line_section flex py-36 justify-center w-full h-full">
           <hr className="w-1/2" />

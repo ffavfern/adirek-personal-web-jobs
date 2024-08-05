@@ -25,15 +25,15 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <section id="testimonials" className="bg-secondary py-20">
+    <section id="testimonials" className="bg-secondary py-40">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
         className="container mx-auto "
       >
-        <h2 className="text-4xl font-bold text-center mb-8">What our Clients say!</h2>
-        <div className="flex justify-center mb-12">
+        <h2 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest text-center mb-8">What our Clients say!</h2>
+        <div className="flex justify-center mb-20">
           <hr className="w-24 border-b-4 border-red-500 mb-10" />
         </div>
         <TestimonialsSwiper  testimonials={testimonials} />
