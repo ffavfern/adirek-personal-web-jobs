@@ -12,6 +12,8 @@ const ManageTestimonials = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // For image preview
+  const [loading, setLoading] = useState(false); // Loading state for form submission
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -25,6 +27,7 @@ const ManageTestimonials = () => {
 
   const handleAddOrUpdateTestimonial = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let imageUrl = newTestimonial.profileImageUrl;
     if (profileImage) {
@@ -34,10 +37,7 @@ const ManageTestimonials = () => {
       imageUrl = await getDownloadURL(imageRef);
     }
 
-    const testimonialData = {
-      ...newTestimonial,
-      profileImageUrl: imageUrl,
-    };
+    const testimonialData = { ...newTestimonial, profileImageUrl: imageUrl };
 
     if (editingId) {
       await updateDoc(doc(db, 'testimonials', editingId), testimonialData);
@@ -45,9 +45,9 @@ const ManageTestimonials = () => {
     } else {
       await addDoc(collection(db, 'testimonials'), testimonialData);
     }
-    
-    setNewTestimonial({ name: '', feedback: '', rating: 0, profileImageUrl: '' });
-    setProfileImage(null);
+
+    setLoading(false);
+    handleResetForm();
     const testimonialsCollection = await getDocs(collection(db, 'testimonials'));
     const testimonialsData = testimonialsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     setTestimonials(testimonialsData);
@@ -62,6 +62,7 @@ const ManageTestimonials = () => {
       profileImageUrl: testimonial.profileImageUrl || ''
     });
     setEditingId(testimonial.id);
+    setImagePreview(testimonial.profileImageUrl || null); // Show existing image as preview
   };
 
   const handleDeleteTestimonial = async (id) => {
@@ -84,6 +85,7 @@ const ManageTestimonials = () => {
   const handleResetForm = () => {
     setNewTestimonial({ name: '', feedback: '', rating: 0, profileImageUrl: '' });
     setProfileImage(null);
+    setImagePreview(null);
     setEditingId(null);
   };
 
@@ -92,7 +94,9 @@ const ManageTestimonials = () => {
   };
 
   const handleProfileImageChange = (e) => {
-    setProfileImage(e.target.files[0]);
+    const file = e.target.files[0];
+    setProfileImage(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
   return (
@@ -138,10 +142,17 @@ const ManageTestimonials = () => {
             onChange={handleProfileImageChange}
             className="input input-bordered w-full"
           />
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="mt-2 h-20 w-20 object-cover rounded-full"
+            />
+          )}
         </div>
         <div className="flex justify-between">
-          <button type="submit" className="btn btn-primary w-1/2 mr-2">
-            {editingId ? 'Update Testimonial' : 'Add Testimonial'}
+          <button type="submit" className="btn btn-primary w-1/2 mr-2" disabled={loading}>
+            {loading ? 'Submitting...' : editingId ? 'Update Testimonial' : 'Add Testimonial'}
           </button>
           <button type="button" onClick={handleResetForm} className="btn btn-secondary w-1/2 ml-2">
             Reset Form

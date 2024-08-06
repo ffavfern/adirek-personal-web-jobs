@@ -21,14 +21,22 @@ const ProjectSlide = ({ id }) => {
   }, []);
 
   return (
-    <section id={id} className="project-slide-section ">
+    <section id={id} className="project-slide-section">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
-        className="container mx-auto p-6"
+        className="container mx-auto"
       >
-        <h2 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest pb-10">Our Projects</h2>
+        <div className="flex flex-row justify-between py-20 items-center">
+          <h2 className="text-5xl font-bold text-gold uppercase tracking-widest">Our Projects</h2>
+          <Link to="/projects/other">
+            <div className="btn text-primary hover:bg-error hover:text-secondary hover:scale-110 hover:shadow-xl text-xl uppercase">
+              Project Other
+            </div>
+          </Link>
+        </div>
+       
         <Swiper
           spaceBetween={30}
           slidesPerView={1}
@@ -43,13 +51,13 @@ const ProjectSlide = ({ id }) => {
         >
           {projects.map(project => (
             <SwiperSlide key={project.id} className='size-card'>
-              <Link to={`/projects/${project.id}`} className="block "> 
+              <Link to={`/${project.id}`} className="block"> 
                 <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group">
                   {project.images && project.images.length > 0 && (
                     <img 
                       src={project.images[0]} 
                       alt={project.title} 
-                      className="w-full h-64 object-cover transition-transform transform group-hover:scale-105" // Adjusted height to h-64 for landscape
+                      className="w-full h-64 object-cover transition-transform transform group-hover:scale-105" 
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>

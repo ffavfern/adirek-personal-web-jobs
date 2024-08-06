@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -17,8 +17,12 @@ const ManageProjects = () => {
   }, []);
 
   const fetchProjects = async () => {
-    const projectsCollection = await getDocs(collection(db, 'projects'));
-    setProjects(projectsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    try {
+      const projectsCollection = await getDocs(collection(db, 'projects'));
+      setProjects(projectsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
   };
 
   const handleImageUpload = async (files) => {
@@ -65,19 +69,49 @@ const ManageProjects = () => {
   };
 
   const handleEditProject = (project) => {
+    console.log('Editing project with ID:', project.id); // Debugging: Log the ID
     setNewProject({ title: project.title, description: project.description, images: project.images, type: project.type, date: project.date });
     setEditingProjectId(project.id);
-    console.log('Editing project:', project.id);
   };
 
   const handleDeleteProject = async (id) => {
     try {
+      console.log('Attempting to delete project with ID:', id); // Debugging: Log the ID
       const projectDoc = doc(db, 'projects', id);
-      await deleteDoc(projectDoc);
-      console.log('Deleted project:', id);
-      fetchProjects();
+
+      // Check if the document exists before attempting to delete
+      const projectSnapshot = await getDoc(projectDoc);
+      if (projectSnapshot.exists()) {
+        await deleteDoc(projectDoc);
+        console.log('Successfully deleted project:', id);
+        fetchProjects(); // Refresh the list of projects after deletion
+      } else {
+        console.error('Project not found with ID:', id);
+      }
     } catch (error) {
-      console.error('Error deleting project:', error);
+      console.error('Error deleting project:', error); // Error handling
+    }
+  };
+
+  const handleDeleteProjectByField = async (fieldValue) => {
+    try {
+      console.log('Attempting to delete project with custom field value:', fieldValue); // Debugging: Log the field value
+
+      // Query the document based on the field 'id'
+      const q = query(collection(db, 'projects'), where('id', '==', fieldValue));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (docSnapshot) => {
+          await deleteDoc(docSnapshot.ref);
+          console.log('Successfully deleted project with custom field value:', fieldValue);
+        });
+        fetchProjects(); // Refresh the list of projects after deletion
+      } else {
+        console.error('No project found with custom field value:', fieldValue);
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error); // Error handling
     }
   };
 
@@ -149,7 +183,8 @@ const ManageProjects = () => {
             <p className="text-gray-600 mb-4">{project.type}</p>
             <p className="text-gray-600 mb-4">{project.date}</p>
             <button onClick={() => handleEditProject(project)} className="btn btn-secondary mr-2">Edit</button>
-            <button onClick={() => handleDeleteProject(project.id)} className="btn btn-danger">Delete</button>
+            {/*<button onClick={() => handleDeleteProject(project.id)} className="btn btn-danger">Delete</button> */}
+            <button onClick={() => handleDeleteProjectByField(project.id)} className="btn btn-danger">Delete</button> 
           </motion.div>
         ))}
       </div>

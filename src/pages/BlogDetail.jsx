@@ -32,7 +32,7 @@ const BlogDetail = () => {
   if (error) return <div className="text-red-500 text-center mt-20">{error}</div>;
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto py-20">
       {blog && (
         <>
           <h1 className="text-4xl font-bold mb-6 uppercase">{blog.title}</h1>

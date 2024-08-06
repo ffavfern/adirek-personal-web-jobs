@@ -1,0 +1,36 @@
+@keyframes spin-slow {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 10s linear infinite;
+  }
+
+.fixed-image {
+  width: auto; /* Fixed width */
+  height: 1080px; /* Fixed height */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  border-radius: 8px; /* Rounded corners for better aesthetics */
+}
+
+.thumbnail-image {
+  width: 75px; /* Fixed width for thumbnails */
+  height: 75px; /* Fixed height for thumbnails */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.thumbnail-image:hover {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+
+.selected-thumbnail {
+  ring: 4px solid #f00; /* Add a red ring around selected thumbnail */
+}

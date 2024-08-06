@@ -13,8 +13,10 @@ import ManageTestimonials from "./pages/ManageTestimonials";
 import ManageContact from "./pages/ManageContact";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-import ProjectDetail from './pages/ProjectDetail'; // The new component we'll create
-
+import ProjectDetail from './components/ProjectDetail'; 
+import ProjectOther from './pages/ProjectOther';
+import BlogDetail from './pages/BlogDetail';
+import BlogAll from './pages/BlogAll';
 
 const queryClient = new QueryClient()
 
@@ -100,7 +102,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
-                   <Route path="/projects/:id" component={ProjectDetail} />
+            <Route path="/:id" element={<ProjectDetail />} />
+            <Route path="/projects/other" element={<ProjectOther />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
+            <Route path="/blogs" element={<BlogAll />} />
 
           </Routes>
         
