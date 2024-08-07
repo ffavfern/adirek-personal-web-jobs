@@ -11,8 +11,7 @@ const BlogAll = () => {
   const [filterCategory, setFilterCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
-  
-  // Use useNavigate hook
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,36 +60,38 @@ const BlogAll = () => {
 
   return (
     <motion.div 
-      className="container mx-auto p-6"
+      className="container mx-auto px-4 sm:px-6 lg:px-8 py-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <motion.h1
-          className="text-4xl font-bold my-20 uppercase"
+          className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           All Blogs
         </motion.h1>
-        {/* Back Button */}
-        <button className="btn btn-primary mb-4 hover:scale-110" onClick={() => navigate("/")}>
+        <button 
+          className="btn btn-primary mt-4 sm:mt-0 hover:scale-110 transition-transform duration-300"
+          onClick={() => navigate("/")}
+        >
           Back to Home
         </button>
       </div>
 
       {/* Search, Filter, and Clear Options */}
       <motion.div 
-        className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
         {/* Search */}
         <div>
-          <label htmlFor="search" className="block text-xl font-bold mb-2">Search Blogs:</label>
+          <label htmlFor="search" className="block text-lg sm:text-xl font-bold mb-2">Search Blogs:</label>
           <input 
             type="text"
             id="search"
@@ -103,7 +104,7 @@ const BlogAll = () => {
 
         {/* Filter by Category */}
         <div>
-          <label htmlFor="filter" className="block text-xl font-bold mb-2 flex items-center"><FaFilter className="mr-2" /> Filter by Category:</label>
+          <label htmlFor="filter" className="block text-lg sm:text-xl font-bold mb-2 flex items-center"><FaFilter className="mr-2" /> Filter by Category:</label>
           <select 
             id="filter" 
             className="input input-bordered w-full"
@@ -130,7 +131,7 @@ const BlogAll = () => {
       </motion.div>
 
       {/* Blog Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
           {filteredBlogs.length > 0 ? (
             filteredBlogs.map((blog, index) => (
@@ -140,7 +141,7 @@ const BlogAll = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
                 whileHover={{ scale: 1.05 }}
               >
                 <Link to={`/blog/${blog.id}`}>
@@ -149,14 +150,14 @@ const BlogAll = () => {
                       <motion.img 
                         src={blog.image} 
                         alt={blog.title} 
-                        className="w-full h-64 object-cover transition-transform transform group-hover:scale-105"
+                        className="w-full h-48 sm:h-56 lg:h-64 object-cover transition-transform transform group-hover:scale-105"
                         layoutId={`blog-image-${blog.id}`}
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>
-                    <div className="absolute inset-0 p-6 flex flex-col justify-end transition-opacity">
-                      <h3 className="text-3xl font-semibold mb-4 text-white uppercase">{blog.title}</h3>
-                      <p className="text-lg text-gray-400">{blog.excerpt || blog.content.slice(0, 100) + '...'}</p>
+                    <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end transition-opacity">
+                      <h3 className="text-lg sm:text-2xl lg:text-3xl font-semibold mb-2 text-white uppercase">{blog.title}</h3>
+                      <p className="text-sm sm:text-lg text-gray-400">{blog.excerpt || blog.content.slice(0, 100) + '...'}</p>
                     </div>
                   </div>
                 </Link>

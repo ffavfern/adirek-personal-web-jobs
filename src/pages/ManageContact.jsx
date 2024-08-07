@@ -62,15 +62,15 @@ const ManageContact = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Contact Details</h2>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Manage Contact Details</h2>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      <form onSubmit={handleSaveDetails} className="mb-4">
+      <form onSubmit={handleSaveDetails} className="space-y-6">
         <div className="mb-4">
-          <label htmlFor="email" className="block mb-2">Email:</label>
+          <label htmlFor="email" className="block mb-2 text-sm sm:text-base">Email:</label>
           <input
             type="email"
             name="email"
@@ -81,7 +81,7 @@ const ManageContact = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="location" className="block mb-2">Location:</label>
+          <label htmlFor="location" className="block mb-2 text-sm sm:text-base">Location:</label>
           <input
             type="text"
             name="location"
@@ -92,7 +92,7 @@ const ManageContact = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="phone" className="block mb-2">Phone:</label>
+          <label htmlFor="phone" className="block mb-2 text-sm sm:text-base">Phone:</label>
           <input
             type="text"
             name="phone"
@@ -102,7 +102,7 @@ const ManageContact = () => {
             required
           />
         </div>
-        <button type="submit" className={`btn btn-primary w-full ${loading ? 'opacity-50' : ''}`} disabled={loading}>
+        <button type="submit" className={`btn btn-primary w-full py-2 sm:py-3 ${loading ? 'opacity-50' : ''}`} disabled={loading}>
           {loading ? 'Saving...' : 'Save Details'}
         </button>
       </form>

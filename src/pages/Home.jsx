@@ -48,20 +48,18 @@ const Home = () => {
     <>
       <Navbar />
       <Hero content={heroContent} />
-      <div className="container mx-20 justify-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <About content={aboutContent} />
         <ProjectSlide id="projectslide" />
         <ProjectsType />
-        
         <Blog posts={blogPosts} />
-        <div className="line_section flex py-36 justify-center w-full h-full">
+        <div className="line_section flex py-20 justify-center">
           <hr className="w-1/2" />
         </div>
         <Testimonials testimonials={testimonials} />
-        
       </div>
       <Contact />
-      <Footer/>
+      <Footer />
     </>
   );
 };

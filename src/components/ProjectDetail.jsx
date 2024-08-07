@@ -4,7 +4,7 @@ import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import LoadingSpinner from '../components/LoadingSpinner'; 
 import { FaCalendarAlt, FaTag, FaInfoCircle } from 'react-icons/fa';
-import './ProjectDetail.css' // Import the custom CSS
+import './ProjectDetail.css'; // Import the custom CSS
 
 const ProjectDetail = () => {
   const { id } = useParams(); 
@@ -47,9 +47,9 @@ const ProjectDetail = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Hero Section */}
-      <div className="bg-gray-900 text-white p-10 rounded-lg shadow-lg mb-8 relative">
+      <div className="relative bg-gray-900 text-white p-6 sm:p-10 rounded-lg shadow-lg mb-8">
         {selectedImage && (
           <img 
             src={selectedImage} 
@@ -58,10 +58,10 @@ const ProjectDetail = () => {
           />
         )}
         <div className="relative z-10">
-          <h1 className="text-5xl font-bold mb-4 uppercase">{project.title}</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 uppercase">{project.title}</h1>
           
           <Link to="/">
-            <button className="mt-4 bg-error text-white py-2 px-6 rounded-lg font-semibold hover:bg-white hover:text-primary transition duration-300">
+            <button className="mt-4 bg-error text-white py-2 px-4 sm:px-6 rounded-lg font-semibold hover:bg-white hover:text-primary transition duration-300">
               Back to Projects
             </button>
           </Link>
@@ -75,16 +75,16 @@ const ProjectDetail = () => {
             <img 
               src={selectedImage} 
               alt={project.title} 
-              className="fixed-image shadow-lg" // Apply fixed size class
+              className="fixed-image shadow-lg max-w-full h-auto rounded-lg"
             />
           </div>
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center flex-wrap gap-4">
             {project.images.map((image, index) => (
               <img 
                 key={index} 
                 src={image} 
                 alt={`${project.title} - Image ${index + 1}`} 
-                className={`thumbnail-image ${selectedImage === image ? 'selected-thumbnail' : ''}`} // Apply thumbnail class and selected state
+                className={`thumbnail-image w-16 h-16 sm:w-24 sm:h-24 rounded-lg shadow-lg cursor-pointer ${selectedImage === image ? 'selected-thumbnail border-2 border-primary' : ''}`}
                 onClick={() => setSelectedImage(image)} 
               />
             ))}
@@ -95,26 +95,26 @@ const ProjectDetail = () => {
       )}
 
       {/* Project Details Section */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Project Details</h2>
-        <p className="text-xl mb-4">{project.description}</p>
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">Project Details</h2>
+        <p className="text-md sm:text-lg mb-4">{project.description}</p>
 
         {/* Project Type */}
         <div className="flex items-center mb-4">
-          <FaTag className="w-6 h-6 mr-2 text-yellow-500 animate-bounce" />
-          <p className="text-lg">Type: <span className="text-gray-700">{project.type || 'N/A'}</span></p>
+          <FaTag className="w-4 h-4 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-bounce" />
+          <p className="text-md sm:text-lg">Type: <span className="text-gray-700">{project.type || 'N/A'}</span></p>
         </div>
 
         {/* Project Date */}
         <div className="flex items-center mb-4">
-          <FaCalendarAlt className="w-6 h-6 mr-2 text-yellow-500 animate-pulse" />
-          <p className="text-lg">Date: <span className="text-gray-700">{project.date || 'N/A'}</span></p>
+          <FaCalendarAlt className="w-4 h-4 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-pulse" />
+          <p className="text-md sm:text-lg">Date: <span className="text-gray-700">{project.date || 'N/A'}</span></p>
         </div>
 
         {/* Project Status */}
         <div className="flex items-center mb-4">
-          <FaInfoCircle className="w-6 h-6 mr-2 text-yellow-500 animate-spin-slow" />
-          <p className="text-lg">Status: <span className="text-gray-700">Ongoing</span></p>
+          <FaInfoCircle className="w-4 h-4 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-spin-slow" />
+          <p className="text-md sm:text-lg">Status: <span className="text-gray-700">Ongoing</span></p>
         </div>
       </div>
     </div>

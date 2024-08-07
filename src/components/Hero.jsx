@@ -26,12 +26,18 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="container mx-auto p-6 "
+        className="container mx-auto px-6 lg:px-12 xl:px-24"
       >
-        <h2 className="text-5xl font-bold mb-14 text-gold uppercase tracking-widest">{heroContent.title}</h2>
-        <p className="text-lg text-secondary uppercase">{heroContent.subtitle}</p>
-        <p className="text-md text-paragraph uppercase">{heroContent.description}</p>
-        <div className="scroll-mouse mt-20"></div>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 md:mb-14 text-gold uppercase tracking-widest">
+          {heroContent.title}
+        </h2>
+        <p className="text-base sm:text-lg md:text-xl text-secondary uppercase mb-4 md:mb-6">
+          {heroContent.subtitle}
+        </p>
+        <p className="text-sm sm:text-md md:text-lg text-paragraph uppercase mb-10">
+          {heroContent.description}
+        </p>
+        <div className="scroll-mouse mt-10 md:mt-20"></div>
       </motion.div>
     </section>
   );

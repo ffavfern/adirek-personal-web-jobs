@@ -93,10 +93,10 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact-section min-h-screen flex flex-col justify-center items-center bg-gray-100">
-      <div className="container mx-auto px-10 lg:px-40 grid grid-cols-1 lg:grid-cols-2 gap-16">
-        <div className="flex flex-col justify-center">
-          <h1 className="text-5xl font-light mb-8">Let’s collaborate</h1>
+    <section id="contact" className="contact-section min-h-screen flex flex-col justify-center items-center bg-gray-100 px-6 sm:px-10 lg:px-20">
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="flex flex-col justify-center text-center lg:text-left">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 sm:mb-8">Let’s collaborate</h1>
           {error ? (
             <div className="text-red-500">{error}</div>
           ) : (
@@ -166,7 +166,7 @@ const Contact = () => {
                 id="message"
                 value={formData.message}
                 onChange={handleChange}
-                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-2 h-32"
+                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-2 h-32 sm:h-40"
                 required
               />
             </div>

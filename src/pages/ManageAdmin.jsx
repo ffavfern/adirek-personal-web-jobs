@@ -42,25 +42,25 @@ const ManageAdmin = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Admin</h2>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Manage Admin</h2>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6 sm:mb-8">Back to Dashboard</button>
       </Link>
-      <form onSubmit={handleAddAdmin} className="mb-4">
+      <form onSubmit={handleAddAdmin} className="mb-8 space-y-4">
         <input
           type="email"
           value={newAdmin.email}
           onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
           placeholder="Email"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <button type="submit" className="btn btn-primary w-full">
           {editingId ? 'Update Admin' : 'Add Admin'}
         </button>
       </form>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {admins.map((admin) => (
           <ContentCard
             key={admin.id}

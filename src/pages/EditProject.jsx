@@ -56,11 +56,11 @@ const EditProject = () => {
   };
 
   return (
-    <div className="container mx-auto py-12">
-      <h1 className="text-3xl font-bold mb-6">Edit Project</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-center sm:text-left">Edit Project</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="title">Title</label>
+          <label className="block text-sm sm:text-base font-bold mb-2" htmlFor="title">Title</label>
           <input
             type="text"
             name="title"
@@ -72,7 +72,7 @@ const EditProject = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="description">Description</label>
+          <label className="block text-sm sm:text-base font-bold mb-2" htmlFor="description">Description</label>
           <textarea
             name="description"
             id="description"
@@ -83,7 +83,7 @@ const EditProject = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="image">Image</label>
+          <label className="block text-sm sm:text-base font-bold mb-2" htmlFor="image">Image</label>
           <input
             type="file"
             name="image"
@@ -93,7 +93,7 @@ const EditProject = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="type">Type</label>
+          <label className="block text-sm sm:text-base font-bold mb-2" htmlFor="type">Type</label>
           <select
             name="type"
             id="type"
@@ -109,7 +109,7 @@ const EditProject = () => {
             <option value="รางวัลเชิดชูเกียรติ">รางวัลเชิดชูเกียรติ</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+        <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={loading}>
           {loading ? 'Updating...' : 'Update Project'}
         </button>
       </form>

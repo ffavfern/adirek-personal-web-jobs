@@ -12,8 +12,8 @@ const ManageTestimonials = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // For image preview
-  const [loading, setLoading] = useState(false); // Loading state for form submission
+  const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -62,7 +62,7 @@ const ManageTestimonials = () => {
       profileImageUrl: testimonial.profileImageUrl || ''
     });
     setEditingId(testimonial.id);
-    setImagePreview(testimonial.profileImageUrl || null); // Show existing image as preview
+    setImagePreview(testimonial.profileImageUrl || null);
   };
 
   const handleDeleteTestimonial = async (id) => {
@@ -100,10 +100,10 @@ const ManageTestimonials = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Testimonials</h2>
+    <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Manage Testimonials</h2>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
       
       <input
@@ -114,23 +114,23 @@ const ManageTestimonials = () => {
         className="input input-bordered w-full mb-4"
       />
 
-      <form onSubmit={handleAddOrUpdateTestimonial} className="mb-4">
+      <form onSubmit={handleAddOrUpdateTestimonial} className="mb-4 space-y-4">
         <input
           type="text"
           value={newTestimonial.name}
           onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
           placeholder="Name"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <textarea
           value={newTestimonial.feedback}
           onChange={(e) => setNewTestimonial({ ...newTestimonial, feedback: e.target.value })}
           placeholder="Feedback"
-          className="textarea textarea-bordered w-full mb-2"
+          className="textarea textarea-bordered w-full"
           required
         />
-        <div className="flex items-center mb-4">
+        <div className="flex items-center space-x-2">
           <span className="mr-2">Rating:</span>
           <StarRating rating={newTestimonial.rating} onRatingChange={handleRatingChange} />
         </div>
@@ -150,11 +150,11 @@ const ManageTestimonials = () => {
             />
           )}
         </div>
-        <div className="flex justify-between">
-          <button type="submit" className="btn btn-primary w-1/2 mr-2" disabled={loading}>
+        <div className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 sm:space-x-2">
+          <button type="submit" className="btn btn-primary w-full sm:w-1/2" disabled={loading}>
             {loading ? 'Submitting...' : editingId ? 'Update Testimonial' : 'Add Testimonial'}
           </button>
-          <button type="button" onClick={handleResetForm} className="btn btn-secondary w-1/2 ml-2">
+          <button type="button" onClick={handleResetForm} className="btn btn-secondary w-full sm:w-1/2">
             Reset Form
           </button>
         </div>

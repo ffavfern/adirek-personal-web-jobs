@@ -32,25 +32,27 @@ const BlogDetail = () => {
   if (error) return <div className="text-red-500 text-center mt-20">{error}</div>;
 
   return (
-    <div className="container mx-auto py-20">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
       {blog && (
         <>
-          <h1 className="text-4xl font-bold mb-6 uppercase">{blog.title}</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 uppercase text-center sm:text-left">
+            {blog.title}
+          </h1>
           <div
-            className="w-full h-64 mb-6 rounded-lg shadow-lg"
+            className="w-full h-48 sm:h-64 lg:h-80 mb-6 rounded-lg shadow-lg bg-cover bg-center"
             style={{
               backgroundImage: `url(${blog.image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
             }}
           ></div>
-          <p className="text-lg text-gray-700 mb-8">{blog.content}</p>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-700 mb-8 leading-relaxed">
+            {blog.content}
+          </p>
         </>
       )}
-      <div className="mt-10">
+      <div className="mt-10 text-center">
         <button
           onClick={() => window.history.back()}
-          className="btn btn-primary"
+          className="btn btn-primary px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4"
         >
           Back to Blogs
         </button>

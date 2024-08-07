@@ -49,7 +49,12 @@ const ManageEducation = () => {
   };
 
   const handleEditEducation = (education) => {
-    setNewEducation({ title: education.title, year: education.year, description: education.description, imageUrl: education.imageUrl });
+    setNewEducation({
+      title: education.title,
+      year: education.year,
+      description: education.description,
+      imageUrl: education.imageUrl
+    });
     setEditingId(education.id);
   };
 
@@ -59,18 +64,18 @@ const ManageEducation = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Education</h2>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Manage Education</h2>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
-      <form onSubmit={handleAddOrUpdateEducation} className="mb-4">
+      <form onSubmit={handleAddOrUpdateEducation} className="space-y-4 mb-8">
         <input
           type="text"
           value={newEducation.title}
           onChange={(e) => setNewEducation({ ...newEducation, title: e.target.value })}
           placeholder="Title"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <input
@@ -78,14 +83,14 @@ const ManageEducation = () => {
           value={newEducation.year}
           onChange={(e) => setNewEducation({ ...newEducation, year: e.target.value })}
           placeholder="Year"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <textarea
           value={newEducation.description}
           onChange={(e) => setNewEducation({ ...newEducation, description: e.target.value })}
           placeholder="Description"
-          className="textarea textarea-bordered w-full mb-2"
+          className="textarea textarea-bordered w-full"
           required
         />
         <input
@@ -93,14 +98,14 @@ const ManageEducation = () => {
           value={newEducation.imageUrl}
           onChange={(e) => setNewEducation({ ...newEducation, imageUrl: e.target.value })}
           placeholder="Image URL or upload file below"
-          className="input input-bordered w-full mb-9"
+          className="input input-bordered w-full"
         />
-        <input type="file" className='mb-9' onChange={(e) => setImageFile(e.target.files[0])} />
+        <input type="file" className="file-input w-full" onChange={(e) => setImageFile(e.target.files[0])} />
         <button type="submit" className="btn btn-primary w-full">
           {editingId ? 'Update Education' : 'Add Education'}
         </button>
       </form>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {educations.map((education) => (
           <ContentCard
             key={education.id}

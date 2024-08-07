@@ -24,17 +24,20 @@ const Blog = () => {
   if (error) return <Error message={error.message} />;
 
   return (
-    <section id="blog" className="text-secondary py-20 ">
-   
-    <div className="container mx-auto text-start">
-      {blogs.length > 0 ? <BlogGrid blogs={blogs} /> : <div>No blogs available</div>}
-    </div>
-    <Link to="/blogs">
-      <div className="btn mt-10 text-primary hover:bg-error hover:text-secondary hover:scale-110 hover:shadow-xl text-xl uppercase">
-        More Blogs
+    <section id="blog" className="text-secondary py-20 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto text-start">
+        {blogs.length > 0 ? (
+          <BlogGrid blogs={blogs} />
+        ) : (
+          <div>No blogs available</div>
+        )}
       </div>
-    </Link>
-  </section>
+      <Link to="/blogs">
+        <div className="btn mt-10 text-primary hover:bg-error hover:text-secondary hover:scale-110 hover:shadow-xl text-lg sm:text-xl uppercase">
+          More Blogs
+        </div>
+      </Link>
+    </section>
   );
 };
 
@@ -43,7 +46,7 @@ const Loading = () => <LoadingSpinner />;
 const Error = ({ message }) => <div>Error: {message}</div>;
 
 const BlogGrid = ({ blogs }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
     {blogs.map((blog) => (
       <BlogCard key={blog.id} blog={blog} />
     ))}
@@ -77,12 +80,11 @@ const BlogCard = ({ blog }) => {
         ></div>
 
         <div className="relative z-10">
-          <h3 className="text-2xl font-bold text-white uppercase">
+          <h3 className="text-xl sm:text-2xl font-bold text-white uppercase">
             {blog.title}
           </h3>
-          <p className="mt-2 text-white">
-            {truncateContent(blog.content, 100)}{" "}
-            {/* Adjust the length as needed */}
+          <p className="mt-2 text-sm sm:text-base text-white">
+            {truncateContent(blog.content, 100)}
           </p>
         </div>
         <div className="mt-4 flex justify-end relative z-10">

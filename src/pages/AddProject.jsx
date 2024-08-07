@@ -44,9 +44,9 @@ const AddProject = () => {
   };
 
   return (
-    <div className="container mx-auto py-12">
-      <h1 className="text-3xl font-bold mb-6">Add New Project</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Add New Project</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2" htmlFor="title">Title</label>
           <input
@@ -98,7 +98,7 @@ const AddProject = () => {
             <option value="รางวัลเชิดชูเกียรติ">รางวัลเชิดชูเกียรติ</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+        <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={loading}>
           {loading ? 'Adding...' : 'Add Project'}
         </button>
       </form>

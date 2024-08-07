@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -53,7 +53,12 @@ const ManageExperience = () => {
   };
 
   const handleEditExperience = (experience) => {
-    setNewExperience({ title: experience.title, year: experience.year, description: experience.description, imageUrl: experience.imageUrl });
+    setNewExperience({
+      title: experience.title,
+      year: experience.year,
+      description: experience.description,
+      imageUrl: experience.imageUrl,
+    });
     setEditingId(experience.id);
   };
 
@@ -63,18 +68,18 @@ const ManageExperience = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Experience</h2>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Manage Experience</h2>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
-      <form onSubmit={handleAddOrUpdateExperience} className="mb-4">
+      <form onSubmit={handleAddOrUpdateExperience} className="space-y-4 mb-8">
         <input
           type="text"
           value={newExperience.title}
           onChange={(e) => setNewExperience({ ...newExperience, title: e.target.value })}
           placeholder="Title"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <input
@@ -82,14 +87,14 @@ const ManageExperience = () => {
           value={newExperience.year}
           onChange={(e) => setNewExperience({ ...newExperience, year: e.target.value })}
           placeholder="Year"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <textarea
           value={newExperience.description}
           onChange={(e) => setNewExperience({ ...newExperience, description: e.target.value })}
           placeholder="Description"
-          className="textarea textarea-bordered w-full mb-2"
+          className="textarea textarea-bordered w-full"
           required
         />
         <input
@@ -97,18 +102,18 @@ const ManageExperience = () => {
           value={newExperience.imageUrl}
           onChange={(e) => setNewExperience({ ...newExperience, imageUrl: e.target.value })}
           placeholder="Image URL"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
         />
         <input
           type="file"
           onChange={(e) => setImageFile(e.target.files[0])}
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
         />
         <button type="submit" className="btn btn-primary w-full">
           {editingId ? 'Update Experience' : 'Add Experience'}
         </button>
       </form>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {experiences.map((experience) => (
           <ContentCard
             key={experience.id}

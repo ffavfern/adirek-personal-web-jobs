@@ -51,7 +51,12 @@ const ManageHero = () => {
   };
 
   const handleEditHero = (hero) => {
-    setNewHero({ title: hero.title, subtitle: hero.subtitle, description: hero.description, imageUrl: hero.imageUrl });
+    setNewHero({
+      title: hero.title,
+      subtitle: hero.subtitle,
+      description: hero.description,
+      imageUrl: hero.imageUrl,
+    });
     setEditingId(hero.id);
   };
 
@@ -61,18 +66,18 @@ const ManageHero = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-4xl font-bold mb-8">Manage Hero</h2>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Manage Hero</h2>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
-      <form onSubmit={handleAddHero} className="mb-4">
+      <form onSubmit={handleAddHero} className="space-y-4 mb-8">
         <input
           type="text"
           value={newHero.title}
           onChange={(e) => setNewHero({ ...newHero, title: e.target.value })}
           placeholder="Title"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <input
@@ -80,26 +85,26 @@ const ManageHero = () => {
           value={newHero.subtitle}
           onChange={(e) => setNewHero({ ...newHero, subtitle: e.target.value })}
           placeholder="Subtitle"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
           required
         />
         <textarea
           value={newHero.description}
           onChange={(e) => setNewHero({ ...newHero, description: e.target.value })}
           placeholder="Description"
-          className="textarea textarea-bordered w-full mb-2"
+          className="textarea textarea-bordered w-full"
           required
         />
         <input
           type="file"
           onChange={(e) => setImageFile(e.target.files[0])}
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full"
         />
         <button type="submit" className="btn btn-primary w-full">
           {editingId ? 'Update Hero' : 'Add Hero'}
         </button>
       </form>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {heroes.map((hero) => (
           <ContentCard
             key={hero.id}

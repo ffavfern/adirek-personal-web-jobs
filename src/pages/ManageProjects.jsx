@@ -116,39 +116,39 @@ const ManageProjects = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-4xl font-bold mb-4">Manage Projects</h1>
+    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Manage Projects</h1>
       <Link to="/dashboard">
-        <button className="btn btn-primary mb-4">Back to Dashboard</button>
+        <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
       <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-        <h2 className="text-2xl font-bold mb-4">{editingProjectId ? 'Edit Project' : 'Add New Project'}</h2>
-        <form onSubmit={handleAddOrUpdateProject}>
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">{editingProjectId ? 'Edit Project' : 'Add New Project'}</h2>
+        <form onSubmit={handleAddOrUpdateProject} className="space-y-4">
           <input
             type="text"
             value={newProject.title}
             onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
             placeholder="Title"
-            className="input input-bordered w-full mb-4"
+            className="input input-bordered w-full"
             required
           />
           <textarea
             value={newProject.description}
             onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
             placeholder="Description"
-            className="textarea textarea-bordered w-full mb-4"
+            className="textarea textarea-bordered w-full"
             required
           />
           <input
             type="file"
             multiple
             onChange={(e) => setImageFiles(Array.from(e.target.files))}
-            className="input input-bordered w-full mb-4"
+            className="input input-bordered w-full"
           />
           <select
             value={newProject.type}
             onChange={(e) => setNewProject({ ...newProject, type: e.target.value })}
-            className="input input-bordered w-full mb-4"
+            className="input input-bordered w-full"
             required
           >
             <option value="" disabled>Select Type</option>
@@ -160,13 +160,15 @@ const ManageProjects = () => {
             type="date"
             value={newProject.date}
             onChange={(e) => setNewProject({ ...newProject, date: e.target.value })}
-            className="input input-bordered w-full mb-4"
+            className="input input-bordered w-full"
             required
           />
-          <button type="submit" className="btn btn-primary">{editingProjectId ? 'Update Project' : 'Add Project'}</button>
+          <button type="submit" className="btn btn-primary w-full">
+            {editingProjectId ? 'Update Project' : 'Add Project'}
+          </button>
         </form>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
           <motion.div 
             key={project.id} 
@@ -175,7 +177,7 @@ const ManageProjects = () => {
             transition={{ duration: 0.3 }} 
             className="bg-white p-6 rounded-lg shadow-lg"
           >
-            <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+            <h3 className="text-lg sm:text-xl font-bold mb-2">{project.title}</h3>
             <p className="text-gray-700 mb-2">{project.description}</p>
             {project.images && project.images.map((image, index) => (
               <img key={`${project.id}-${index}`} src={image} alt={project.title} className="w-full h-32 object-cover rounded-lg mb-2" />
@@ -183,7 +185,6 @@ const ManageProjects = () => {
             <p className="text-gray-600 mb-4">{project.type}</p>
             <p className="text-gray-600 mb-4">{project.date}</p>
             <button onClick={() => handleEditProject(project)} className="btn btn-secondary mr-2">Edit</button>
-            {/*<button onClick={() => handleDeleteProject(project.id)} className="btn btn-danger">Delete</button> */}
             <button onClick={() => handleDeleteProjectByField(project.id)} className="btn btn-danger">Delete</button> 
           </motion.div>
         ))}
