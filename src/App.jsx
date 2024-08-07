@@ -95,7 +95,7 @@ function App() {
               }
             />
             <Route
-              path="/dashboard/contact"
+              path="/dashboard/manageContact"
               element={
                 <ProtectedRoute>
                   <ManageContact />

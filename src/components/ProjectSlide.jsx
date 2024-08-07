@@ -21,7 +21,7 @@ const ProjectSlide = ({ id }) => {
   }, []);
 
   return (
-    <section id={id} className="project-slide-section">
+    <section id={id} className="project-slide-section pb-20">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 

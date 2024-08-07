@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 import { db } from '../firebase';
 import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import LoadingSpinner from './LoadingSpinner';
 
 const Contact = () => {
+  const form = useRef();
   const [formData, setFormData] = useState({
     name: '',
     subject: '',
@@ -21,18 +24,14 @@ const Contact = () => {
   useEffect(() => {
     const fetchContactDetails = async () => {
       try {
-        console.log("Fetching contact details from Firebase...");
         const docRef = doc(db, 'siteInfo', 'contactDetails');
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          console.log("Contact details found:", docSnap.data());
           setContactDetails(docSnap.data());
         } else {
-          console.error('No such document!');
           setError('Failed to load contact details. Document does not exist.');
         }
       } catch (error) {
-        console.error('Error fetching contact details:', error.message);
         setError('Failed to load contact details.');
       }
     };
@@ -59,7 +58,7 @@ const Contact = () => {
     return '';
   };
 
-  const handleSubmit = async (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
 
     const errorMessage = validateForm();
@@ -71,16 +70,26 @@ const Contact = () => {
     setLoading(true);
     setFormStatus('');
 
-    try {
-      await addDoc(collection(db, 'contactMessages'), formData);
-      setFormStatus('Message sent successfully!');
-      setFormData({ name: '', subject: '', email: '', message: '' });
-    } catch (error) {
-      console.error('Error submitting contact form:', error.message);
-      setFormStatus('Failed to send message. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    emailjs
+      .sendForm('service_jczvhje', 'template_md9k2m9', form.current, '5W1ogwwRyLJ7oxZJC')
+      .then(
+        async () => {
+          try {
+            await addDoc(collection(db, 'contactMessages'), formData);
+            setFormStatus('Message sent successfully!');
+            setFormData({ name: '', subject: '', email: '', message: '' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } catch (error) {
+            setFormStatus('Failed to save message. Please try again.');
+          }
+        },
+        (error) => {
+          setFormStatus(`Failed to send message. Please try again. Error: ${error.text}`);
+        }
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -92,21 +101,25 @@ const Contact = () => {
             <div className="text-red-500">{error}</div>
           ) : (
             <>
-              <div className="text-lg mb-6">
-                <p>{contactDetails.email}</p>
-              </div>
-              <div className="text-sm leading-loose">
-                <p>Find us</p>
-                <p className="mb-6">{contactDetails.location}</p>
-                <p>{contactDetails.phone}</p>
-              </div>
+              {loading ? <LoadingSpinner /> : (
+                <>
+                  <div className="text-lg mb-6">
+                    <p>{contactDetails.email}</p>
+                  </div>
+                  <div className="text-sm leading-loose">
+                    <p>Find us</p>
+                    <p className="mb-6">{contactDetails.location}</p>
+                    <p>{contactDetails.phone}</p>
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
 
         <div className="flex flex-col justify-center">
           <h2 className="text-lg font-light mb-4">Say hello</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form ref={form} onSubmit={sendEmail} className="space-y-6">
             <div className="flex flex-col">
               <label htmlFor="name" className="text-sm uppercase tracking-wide">Name</label>
               <input

@@ -8,8 +8,8 @@ import ProjectSlide from '../components/ProjectSlide';
 import ProjectsType from '../components/ProjectsType';
 import Blog from '../components/Blog';
 import Testimonials from '../components/Testimonials';
-import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import Contact from '../components/Contact';
 
 const fetchCollectionData = async (collectionName) => {
   const collectionSnapshot = await getDocs(collection(db, collectionName));

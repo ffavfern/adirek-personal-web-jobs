@@ -25,14 +25,15 @@ const Blog = () => {
 
   return (
     <section id="blog" className="text-secondary py-20 ">
-    <Link to="/blogs">
-      <div className="btn text-primary hover:bg-error hover:text-secondary hover:scale-110 hover:shadow-xl text-xl uppercase">
-        More Blogs
-      </div>
-    </Link>
+   
     <div className="container mx-auto text-start">
       {blogs.length > 0 ? <BlogGrid blogs={blogs} /> : <div>No blogs available</div>}
     </div>
+    <Link to="/blogs">
+      <div className="btn mt-10 text-primary hover:bg-error hover:text-secondary hover:scale-110 hover:shadow-xl text-xl uppercase">
+        More Blogs
+      </div>
+    </Link>
   </section>
   );
 };
