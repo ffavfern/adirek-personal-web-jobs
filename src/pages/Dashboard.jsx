@@ -23,7 +23,7 @@ const Dashboard = () => {
     { path: "/dashboard/experience", label: " Experience" },
     { path: "/dashboard/education", label: " Education" },
     { path: "/dashboard/testimonials", label: " Testimonials" },
-    { path: "/dashboard/contact", label: " Contact" },
+    { path: "/dashboard/manageContact", label: " Contact" },
   ];
 
   return (

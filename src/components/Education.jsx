@@ -19,9 +19,7 @@ const EducationItem = ({ title, year, description, imageUrl }) => {
       <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-500">
         {year}
       </p>
-      <p className="text-sm sm:text-md md:text-lg lg:text-xl text-gray-700">
-        {description}
-      </p>
+      {/*<p className="text-sm sm:text-md md:text-lg lg:text-xl text-gray-700"> {description}</p>*/ }
     </div>
   </div>
   

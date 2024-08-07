@@ -6,20 +6,7 @@ import { FaDownload } from "react-icons/fa";
 
 const About = () => {
   return (
-    <section className="about flex flex-col md:flex-row justify-between py-10 sm:py-20 md:py-40 lg:py-60 items-start gap-10 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-32">
-      {/* Experience Section */}
-      <motion.div
-        className="experience flex flex-col w-full md:w-1/3"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-gold uppercase tracking-widest">
-          Experience
-        </h1>
-        <Experience />
-      </motion.div>
-
+    <section className="about flex flex-col justify-center items-center gap-y-20">
       {/* Profile Section */}
       <motion.div
         className="profile items-center flex flex-col w-full md:w-1/3"
@@ -47,11 +34,27 @@ const About = () => {
             Download CV
           </motion.button>
         </a>
+       
       </motion.div>
+      <div className="flex flex-row justify-between gap-4">
+          {/* Experience Section */}
+      <motion.div
+        className="experience flex flex-col flex-col w-1/2"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-gold uppercase tracking-widest">
+          Experience
+        </h1>
+        <Experience />
+      </motion.div>
+
+      
 
       {/* Education Section */}
       <motion.div
-        className="education flex flex-col w-full md:w-1/3"
+        className="education flex flex-col w-1/2"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}
@@ -61,6 +64,8 @@ const About = () => {
         </h1>
         <Education />
       </motion.div>
+          </div>
+      
     </section>
   );
 };

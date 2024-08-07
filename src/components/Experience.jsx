@@ -47,7 +47,7 @@ const Experience = () => {
           key={experience.id}
           title={experience.title}
           year={experience.year}
-          description={experience.description}
+          //description={experience.description}
           imageUrl={experience.imageUrl}
         />
       ))}
