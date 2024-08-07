@@ -26,11 +26,7 @@ function Navbar() {
         href="#contact"
         aria-label="Go to Contact section"
       ></a>
-      <a
-        className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-black hover:bg-error active:bg-error transition-all duration-300"
-        href="#footer"
-        aria-label="Go to Footer section"
-      ></a>
+   
     </nav>
   );
 }

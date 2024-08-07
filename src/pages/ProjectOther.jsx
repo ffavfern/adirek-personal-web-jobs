@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 const ProjectOther = () => {
+  const { typeKey } = useParams();  // Get the typeKey from the URL
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [filterType, setFilterType] = useState("");
+  const [filterType, setFilterType] = useState(typeKey || ""); // Initialize filterType with typeKey or an empty string
   const [sortOption, setSortOption] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
+  // Fetch projects from the database
   useEffect(() => {
     const fetchProjects = async () => {
       const projectsCollection = await getDocs(collection(db, "projects"));
@@ -20,18 +22,23 @@ const ProjectOther = () => {
         ...doc.data(),
       }));
       setProjects(projectData);
-      setFilteredProjects(projectData);
+
+      // Filter projects by the typeKey from the URL
+      if (typeKey) {
+        setFilteredProjects(projectData.filter(project => project.type === typeKey));
+      } else {
+        setFilteredProjects(projectData);
+      }
     };
     fetchProjects();
-  }, []);
+  }, [typeKey]);  // Depend on typeKey to fetch projects only when it changes
 
+  // Apply search and sort filters
   useEffect(() => {
     let updatedProjects = [...projects];
 
     if (filterType) {
-      updatedProjects = updatedProjects.filter(
-        (project) => project.type === filterType
-      );
+      updatedProjects = updatedProjects.filter(project => project.type === filterType);
     }
 
     if (searchTerm) {
@@ -49,13 +56,13 @@ const ProjectOther = () => {
     }
 
     setFilteredProjects(updatedProjects);
-  }, [filterType, sortOption, searchTerm, projects]);
+  }, [filterType, searchTerm, sortOption, projects]);  // Only re-run this effect when these dependencies change
 
   const clearFilters = () => {
-    setFilterType("");
+    setFilterType(typeKey || "");  // Reset filterType to typeKey or an empty string
     setSortOption("");
     setSearchTerm("");
-    setFilteredProjects(projects);
+    setFilteredProjects(projects.filter(project => project.type === (typeKey || filterType)));
   };
 
   return (
@@ -72,9 +79,8 @@ const ProjectOther = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          All Projects
+          {typeKey ? `Projects in ${typeKey}` : "All Projects"}
         </motion.h1>
-        {/* Back Button */}
         <button
           className="btn btn-primary mb-4 sm:mb-0 sm:ml-4 hover:scale-110"
           onClick={() => navigate("/")}
@@ -83,14 +89,12 @@ const ProjectOther = () => {
         </button>
       </div>
 
-      {/* Search, Filter, and Sort Options */}
       <motion.div
         className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Search */}
         <div>
           <label htmlFor="search" className="block text-xl font-bold mb-2">
             Search by Title:
@@ -105,7 +109,6 @@ const ProjectOther = () => {
           />
         </div>
 
-        {/* Filter by Type */}
         <div>
           <label htmlFor="filter" className="block text-xl font-bold mb-2">
             Filter by Type:
@@ -119,14 +122,11 @@ const ProjectOther = () => {
             <option value="">All Types</option>
             <option value="การประกวดแข่งขัน">การประกวดแข่งขัน</option>
             <option value="งานวิจัยและการตีพิมพ์">งานวิจัยและการตีพิมพ์</option>
-            <option value="วิทยาการและผู้ทรงคุณวุฒิ">
-              วิทยาการและผู้ทรงคุณวุฒิ
-            </option>
+            <option value="วิทยาการและผู้ทรงคุณวุฒิ">วิทยาการและผู้ทรงคุณวุฒิ</option>
             <option value="รางวัลเชิดชูเกียรติ">รางวัลเชิดชูเกียรติ</option>
           </select>
         </div>
 
-        {/* Sort Options */}
         <div>
           <label htmlFor="sort" className="block text-xl font-bold mb-2">
             Sort by:
@@ -144,7 +144,6 @@ const ProjectOther = () => {
         </div>
       </motion.div>
 
-      {/* Clear Filters Button */}
       <motion.div
         className="mb-6 flex justify-end"
         initial={{ opacity: 0, scale: 0.95 }}
@@ -156,7 +155,6 @@ const ProjectOther = () => {
         </button>
       </motion.div>
 
-      {/* Project Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
           {filteredProjects.map((project, index) => (
@@ -171,12 +169,11 @@ const ProjectOther = () => {
             >
               <Link to={`/${project.id}`}>
                 <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group">
-                  {project.images && project.images.length > 0 && (
+                  {project.images?.length > 0 && (
                     <motion.img
                       src={project.images[0]}
                       alt={project.title}
                       className="w-full h-64 object-cover transition-transform transform group-hover:scale-105"
-                      layoutId={`project-image-${project.id}`}
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>

@@ -1,0 +1,18 @@
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+    background-color: rgba(238, 35, 35, 0.8);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  
+  .custom-cursor.hover {
+    transform: translate(-50%, -50%) scale(2);
+    background-color: rgba(238, 35, 35, 0.8);
+  }
+  
+  

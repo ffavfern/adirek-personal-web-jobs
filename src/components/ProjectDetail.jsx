@@ -12,6 +12,7 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
   const [selectedImage, setSelectedImage] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -34,6 +35,14 @@ const ProjectDetail = () => {
     fetchProject();
   }, [id]);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   if (loading) {
     return <LoadingSpinner />; 
   }
@@ -47,9 +56,9 @@ const ProjectDetail = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="container mx-auto mb-20">
       {/* Hero Section */}
-      <div className="relative bg-gray-900 text-white p-6 sm:p-10 rounded-lg shadow-lg mb-8">
+      <div className="relative bg-gray-900 text-white p-6 sm:p-10 shadow-lg mb-8">
         {selectedImage && (
           <img 
             src={selectedImage} 
@@ -58,10 +67,10 @@ const ProjectDetail = () => {
           />
         )}
         <div className="relative z-10">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 uppercase">{project.title}</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 uppercase">{project.title}</h1>
           
           <Link to="/">
-            <button className="mt-4 bg-error text-white py-2 px-4 sm:px-6 rounded-lg font-semibold hover:bg-white hover:text-primary transition duration-300">
+            <button className="mt-4 bg-error text-white py-2 px-4 sm:px-6 rounded-lg font-semibold hover:bg-error transition duration-300">
               Back to Projects
             </button>
           </Link>
@@ -71,11 +80,12 @@ const ProjectDetail = () => {
       {/* Image Gallery Section */}
       {project.images && project.images.length > 0 ? (
         <div className="mb-8">
-          <div className="w-full h-auto mb-6 flex justify-center">
+          <div className="w-full max-w-3xl mx-auto mb-6 flex justify-center">
             <img 
               src={selectedImage} 
               alt={project.title} 
-              className="fixed-image shadow-lg max-w-full h-auto rounded-lg"
+              className="w-full max-h-80 object-cover shadow-lg rounded-lg cursor-pointer"
+              onClick={openModal} // Open modal on click
             />
           </div>
           <div className="flex justify-center flex-wrap gap-4">
@@ -84,7 +94,7 @@ const ProjectDetail = () => {
                 key={index} 
                 src={image} 
                 alt={`${project.title} - Image ${index + 1}`} 
-                className={`thumbnail-image w-16 h-16 sm:w-24 sm:h-24 rounded-lg shadow-lg cursor-pointer ${selectedImage === image ? 'selected-thumbnail border-2 border-primary' : ''}`}
+                className={`thumbnail-image w-20 h-20 sm:w-24 sm:h-24 rounded-lg shadow-lg cursor-pointer ${selectedImage === image ? 'selected-thumbnail border-2 border-error' : ''}`}
                 onClick={() => setSelectedImage(image)} 
               />
             ))}
@@ -95,28 +105,47 @@ const ProjectDetail = () => {
       )}
 
       {/* Project Details Section */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg lg:mx-80">
         <h2 className="text-xl sm:text-2xl font-bold mb-4">Project Details</h2>
-        <p className="text-md sm:text-lg mb-4">{project.description}</p>
+        <p className="text-base sm:text-lg mb-4">{project.description}</p>
 
         {/* Project Type */}
         <div className="flex items-center mb-4">
-          <FaTag className="w-4 h-4 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-bounce" />
-          <p className="text-md sm:text-lg">Type: <span className="text-gray-700">{project.type || 'N/A'}</span></p>
+          <FaTag className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-bounce" />
+          <p className="text-base sm:text-lg">Type: <span className="text-gray-700">{project.type || 'N/A'}</span></p>
         </div>
 
         {/* Project Date */}
         <div className="flex items-center mb-4">
-          <FaCalendarAlt className="w-4 h-4 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-pulse" />
-          <p className="text-md sm:text-lg">Date: <span className="text-gray-700">{project.date || 'N/A'}</span></p>
+          <FaCalendarAlt className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-pulse" />
+          <p className="text-base sm:text-lg">Date: <span className="text-gray-700">{project.date || 'N/A'}</span></p>
         </div>
 
         {/* Project Status */}
         <div className="flex items-center mb-4">
-          <FaInfoCircle className="w-4 h-4 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-spin-slow" />
-          <p className="text-md sm:text-lg">Status: <span className="text-gray-700">Ongoing</span></p>
+          <FaInfoCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-spin-slow" />
+          <p className="text-base sm:text-lg">Status: <span className="text-gray-700">Ongoing</span></p>
         </div>
       </div>
+
+      {/* Full Image Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative max-w-4xl mx-auto">
+            <img 
+              src={selectedImage} 
+              alt={project.title} 
+              className="w-full h-auto max-h-screen object-cover"
+            />
+            <button 
+              onClick={closeModal} 
+              className="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-2 text-xl"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

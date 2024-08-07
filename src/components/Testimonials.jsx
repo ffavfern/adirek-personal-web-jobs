@@ -32,18 +32,18 @@ const Testimonials = () => {
   }
 
   return (
-    <section id="testimonials" className="bg-secondary py-20 sm:py-40">
+    <section id="testimonials" className="bg-secondary py-16 sm:py-32 lg:py-40">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
         className="container mx-auto px-4 sm:px-6 lg:px-8"
       >
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 sm:mb-14 text-gold uppercase tracking-widest text-center">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-12 lg:mb-16 text-gold uppercase tracking-widest text-center">
           What our Clients say!
         </h2>
-        <div className="flex justify-center mb-10 sm:mb-20">
-          <hr className="w-16 sm:w-24 border-b-4 border-red-500" />
+        <div className="flex justify-center mb-8 sm:mb-16">
+          <hr className="w-12 sm:w-20 lg:w-24 border-b-4 border-red-500" />
         </div>
         <TestimonialsSwiper testimonials={testimonials} />
       </motion.div>
@@ -53,23 +53,27 @@ const Testimonials = () => {
 
 const TestimonialsSwiper = ({ testimonials }) => (
   <Swiper
-    spaceBetween={20}
-    slidesPerView={1}
+    spaceBetween={10} // Set smaller space between slides for mobile devices
+    slidesPerView={1} // Start with 1 slide per view
     pagination={{ clickable: true }}
     modules={[Pagination]}
     className="pb-10"
     breakpoints={{
+      480: {
+        slidesPerView: 1, // 1 slide per view on screens >= 480px
+        spaceBetween: 15, // Slightly increased space between slides
+      },
       640: {
-        slidesPerView: 1,
-        spaceBetween: 20,
+        slidesPerView: 2, // 2 slides per view on screens >= 640px
+        spaceBetween: 20, // Increased space between slides
       },
       768: {
-        slidesPerView: 2,
-        spaceBetween: 30,
+        slidesPerView: 2, // 2 slides per view on screens >= 768px
+        spaceBetween: 25, // Increased space between slides
       },
       1024: {
-        slidesPerView: 3,
-        spaceBetween: 40,
+        slidesPerView: 3, // 3 slides per view on screens >= 1024px
+        spaceBetween: 30, // Increased space between slides
       },
     }}
   >
@@ -82,7 +86,7 @@ const TestimonialsSwiper = ({ testimonials }) => (
 );
 
 const TestimonialCard = ({ testimonial }) => (
-  <div className="p-6 sm:p-8 bg-white rounded-lg shadow-lg flex flex-col items-center text-center mx-4">
+  <div className="bg-white rounded-lg shadow-lg flex flex-col items-center text-center p-4 sm:p-6 md:p-8 mx-auto max-w-xs w-full">
     {testimonial.profileImageUrl ? (
       <ProfileImage src={testimonial.profileImageUrl} alt={testimonial.name} />
     ) : (
@@ -90,21 +94,23 @@ const TestimonialCard = ({ testimonial }) => (
         <span className="text-gray-500">No Image</span>
       </div>
     )}
-    <h3 className="text-lg sm:text-xl font-semibold mb-2">{testimonial.name}</h3>
-    {testimonial.position && <p className="text-sm sm:text-base text-gray-500 mb-4">{testimonial.position}</p>}
-    <div className="flex mb-4">
+    <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">{testimonial.name}</h3>
+    {testimonial.position && (
+      <p className="text-sm sm:text-base md:text-lg text-gray-500 mb-4">{testimonial.position}</p>
+    )}
+    <div className="flex mb-4 justify-center">
       {Array.from({ length: 5 }).map((_, index) => (
         index < testimonial.rating ? 
-          <FaStar key={index} className="text-yellow-500 w-4 h-4 sm:w-5 sm:h-5" /> : 
-          <FaRegStar key={index} className="text-yellow-500 w-4 h-4 sm:w-5 sm:h-5" />
+          <FaStar key={index} className="text-yellow-500 w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6" /> : 
+          <FaRegStar key={index} className="text-yellow-500 w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6" />
       ))}
     </div>
-    <p className="mb-6 text-sm sm:text-base text-gray-700">"{testimonial.feedback}"</p>
+    <p className="mb-6 text-sm sm:text-base md:text-lg text-gray-700">"{testimonial.feedback}"</p>
   </div>
 );
 
 const ProfileImage = ({ src, alt }) => (
-  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mb-4 border-2 border-gray-300">
+  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-4 border-2 border-gray-300">
     <img 
       src={src} 
       alt={alt} 

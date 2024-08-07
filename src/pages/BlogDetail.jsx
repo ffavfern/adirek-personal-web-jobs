@@ -38,12 +38,13 @@ const BlogDetail = () => {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 uppercase text-center sm:text-left">
             {blog.title}
           </h1>
-          <div
-            className="w-full h-48 sm:h-64 lg:h-80 mb-6 rounded-lg shadow-lg bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${blog.image})`,
-            }}
-          ></div>
+          <div className="w-full max-w-4xl mx-auto mb-6">
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-auto max-h-80 object-cover rounded-lg shadow-lg"
+            />
+          </div>
           <p className="text-base sm:text-lg lg:text-xl text-gray-700 mb-8 leading-relaxed">
             {blog.content}
           </p>
@@ -52,7 +53,7 @@ const BlogDetail = () => {
       <div className="mt-10 text-center">
         <button
           onClick={() => window.history.back()}
-          className="btn btn-primary px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4"
+          className="bg-primary text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-error transition"
         >
           Back to Blogs
         </button>

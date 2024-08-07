@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { collection, getDocs } from 'firebase/firestore'; 
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import About from '../components/About';
@@ -10,6 +11,8 @@ import Blog from '../components/Blog';
 import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
 import Contact from '../components/Contact';
+import CustomCursor from '../components/CustomCursor';
+import './Home.css';
 
 const fetchCollectionData = async (collectionName) => {
   const collectionSnapshot = await getDocs(collection(db, collectionName));
@@ -21,6 +24,11 @@ const Home = () => {
   const [aboutContent, setAboutContent] = useState({});
   const [blogPosts, setBlogPosts] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
+
+  // Parallax effect with useScroll
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 200], [0, 1]);
+  const yTransform = useTransform(scrollY, [0, 200], [50, 0]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -47,17 +55,38 @@ const Home = () => {
   return (
     <>
       <Navbar />
+      <CustomCursor />
       <Hero content={heroContent} />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <About content={aboutContent} />
-        <ProjectSlide id="projectslide" />
-        <ProjectsType />
-        <Blog posts={blogPosts} />
+      <motion.div
+        className="container mx-auto px-4 sm:px-6 lg:px-8 py-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }}>
+          <About content={aboutContent} />
+        </motion.div>
+        
+        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.2 }}>
+          <ProjectSlide id="projectslide" />
+        </motion.div>
+        
+        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.4 }}>
+          <ProjectsType />
+        </motion.div>
+        
+        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.6 }}>
+          <Blog posts={blogPosts} />
+        </motion.div>
+        
         <div className="line_section flex py-20 justify-center">
           <hr className="w-1/2" />
         </div>
-        <Testimonials testimonials={testimonials} />
-      </div>
+        
+        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.8 }}>
+          <Testimonials testimonials={testimonials} />
+        </motion.div>
+      </motion.div>
       <Contact />
       <Footer />
     </>
