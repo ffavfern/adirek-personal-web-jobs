@@ -3,8 +3,14 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 const ExperienceItem = ({ title, year, description, imageUrl }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div className="experience_detail flex flex-col md:flex-row mt-8 gap-4 hover:bg-gray-100 transition-all duration-300 rounded-lg p-4">
+    <div
+      className="experience_detail flex flex-col md:flex-row mt-8 gap-4 hover:bg-gray-100 transition-all duration-300 rounded-lg p-4"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="logo experience w-full md:w-1/4 flex-shrink-0">
         <img
           src={imageUrl}
@@ -19,9 +25,11 @@ const ExperienceItem = ({ title, year, description, imageUrl }) => {
         <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-500">
           {year}
         </p>
-        <p className="text-sm sm:text-md md:text-lg lg:text-xl text-gray-700">
-          {description}
-        </p>
+        {isHovered && (
+          <p className="text-sm sm:text-md md:text-lg lg:text-xl text-gray-700">
+            {description}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -47,7 +55,7 @@ const Experience = () => {
           key={experience.id}
           title={experience.title}
           year={experience.year}
-          //description={experience.description}
+          description={experience.description}
           imageUrl={experience.imageUrl}
         />
       ))}
