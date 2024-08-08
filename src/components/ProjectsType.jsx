@@ -52,11 +52,11 @@ const ProjectsType = () => {
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
-        className="container mx-auto text-center"
+        className="container mx-auto text-center justify-between"
       >
         <div 
-          className="grid gap-8 place-items-center"
-          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}
+          className="flex justify-between"
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}
         >
           {projectTypes.filter(type => type.count > 0).map((type) => (
             <ProjectCard key={type.typeKey} type={type} />
@@ -72,17 +72,17 @@ const ProjectCard = ({ type }) => {
 
   return (
     <motion.div 
-      className={`relative p-8 ${type.color} text-secondary rounded-lg shadow-lg flex flex-col justify-between items-start`}
+      className={`relative p-6 ${type.color} text-secondary rounded-lg shadow-lg flex flex-col justify-between h-full`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ scale: 1.05 }}
-      style={{ minWidth: '300px', maxWidth: '300px', height: 'auto' }}
+      style={{ width: '100%', maxWidth: '300px' }}
     >
       <div className="flex items-center justify-center h-12 w-12 bg-opacity-10 rounded-full mb-4">
         <IconComponent size={40} className="text-error" />
       </div>
-      <div>
+      <div className="flex-grow">
         <h3 className="text-xl font-bold mb-2 text-primary">{type.displayName}</h3>
       </div>
       <div className="mt-4">
@@ -92,6 +92,7 @@ const ProjectCard = ({ type }) => {
         </Link>
       </div>
     </motion.div>
+
   );
 };
 

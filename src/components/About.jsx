@@ -39,7 +39,7 @@ const About = () => {
       <div className="flex flex-row justify-between gap-4">
           {/* Experience Section */}
       <motion.div
-        className="experience flex flex-col flex-col w-1/2"
+        className="experience flex flex-col w-1/2"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}

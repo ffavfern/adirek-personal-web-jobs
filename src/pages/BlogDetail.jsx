@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import LoadingSpinner from '../components/LoadingSpinner';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { FiArrowLeft } from "react-icons/fi";
 
 const BlogDetail = () => {
   const { id } = useParams(); // Get the blog ID from the URL
@@ -10,17 +11,18 @@ const BlogDetail = () => {
   const [loading, setLoading] = useState(true); // State to manage loading state
   const [error, setError] = useState(null); // State to manage error messages
 
+  // Fetch the blog details when the component mounts
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const blogDoc = await getDoc(doc(db, 'blogs', id));
+        const blogDoc = await getDoc(doc(db, "blogs", id));
         if (blogDoc.exists()) {
           setBlog({ id: blogDoc.id, ...blogDoc.data() });
         } else {
-          setError('Blog not found');
+          setError("Blog not found");
         }
       } catch (err) {
-        setError('Error fetching blog details');
+        setError("Error fetching blog details");
       } finally {
         setLoading(false);
       }
@@ -28,34 +30,46 @@ const BlogDetail = () => {
     fetchBlog();
   }, [id]);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-500 text-center mt-20">{error}</div>;
+  if (loading) return <LoadingSpinner />; // Show loading spinner while data is being fetched
+
+  if (error) {
+    return <div className="text-red-500 text-center mt-20">{error}</div>; // Show error message if any
+  }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
       {blog && (
         <>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 uppercase text-center sm:text-left">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 uppercase text-center sm:text-left animate-fade-in">
             {blog.title}
           </h1>
-          <div className="w-full max-w-4xl mx-auto mb-6">
+          <div className="w-full max-w-4xl mx-auto mb-8">
             <img
-              src={blog.image}
-              alt={blog.title}
-              className="w-full h-auto max-h-80 object-cover rounded-lg shadow-lg"
+              src={blog.images}
+              alt={`Cover image for ${blog.title}`}
+              className="w-full h-auto max-h-96 object-cover rounded-lg shadow-2xl transition-transform duration-500 ease-in-out hover:scale-105"
             />
           </div>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-700 mb-8 leading-relaxed">
-            {blog.content}
-          </p>
+          <div className="prose prose-lg max-w-none text-gray-700 mb-10 leading-relaxed animate-fade-in">
+            {/* Ensure iframe styling and responsiveness */}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: blog.content.replace(
+                  /<iframe/g,
+                  '<iframe class="w-full aspect-video mb-6 rounded-lg shadow-md" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation"'
+                ),
+              }}
+            />
+          </div>
         </>
       )}
-      <div className="mt-10 text-center">
+      <div className="mt-12 text-center">
         <button
           onClick={() => window.history.back()}
-          className="bg-primary text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-error transition"
+          className="bg-primary text-white font-semibold py-2 px-6 rounded-full shadow-lg flex items-center justify-center space-x-2 hover:bg-primary-dark transition duration-300 ease-in-out transform hover:scale-105"
         >
-          Back to Blogs
+          <FiArrowLeft className="w-5 h-5" />
+          <span>Back to Blogs</span>
         </button>
       </div>
     </div>

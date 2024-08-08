@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { v4 as uuidv4 } from 'uuid';
 import { useQuill } from 'react-quilljs';
-import 'quill/dist/quill.snow.css'; // Import Quill styles
+import 'quill/dist/quill.snow.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ManageBlogs = () => {
   const { quill, quillRef } = useQuill();
   const [blogs, setBlogs] = useState([]);
+  const [categories, setCategories] = useState(['Technology', 'Health', 'Lifestyle']);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [newBlog, setNewBlog] = useState({ title: '', content: '', images: [] });
+  const [newBlog, setNewBlog] = useState({ title: '', content: '', category: '', images: [] });
+  const [newCategory, setNewCategory] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const [imageUrls, setImageUrls] = useState(['']);
   const [editingBlogId, setEditingBlogId] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -30,9 +33,11 @@ const ManageBlogs = () => {
           ...doc.data(),
         }));
         setBlogs(blogsList);
+        toast.success('Blogs loaded successfully');
       } catch (err) {
         console.error('Error fetching blogs:', err);
         setError('Failed to load blogs. Please try again later.');
+        toast.error('Failed to load blogs');
       } finally {
         setLoading(false);
       }
@@ -61,6 +66,7 @@ const ManageBlogs = () => {
           imageFiles.map(async (file) => {
             if (!file.type.startsWith('image/')) {
               setError('Invalid file type. Only images are allowed.');
+              toast.error('Invalid file type. Only images are allowed.');
               return null;
             }
 
@@ -70,32 +76,38 @@ const ManageBlogs = () => {
           })
         );
 
-        // Remove any null entries from the array
         uploadedImageUrls = uploadedImageUrls.filter(Boolean);
       }
 
-      const allImages = [...uploadedImageUrls, ...imageUrls.filter(url => url.trim())];
+      const allImages = [...uploadedImageUrls, ...imageUrls.filter((url) => url.trim())];
       const blogData = { ...newBlog, images: allImages };
 
       if (editingBlogId) {
         const blogRef = doc(db, 'blogs', editingBlogId);
         await updateDoc(blogRef, blogData);
-        setBlogs(blogs.map((blog) => (blog.id === editingBlogId ? { id: blog.id, ...blogData } : blog)));
+        setBlogs(
+          blogs.map((blog) =>
+            blog.id === editingBlogId ? { id: blog.id, ...blogData } : blog
+          )
+        );
+        toast.success('Blog updated successfully');
       } else {
         const docRef = await addDoc(collection(db, 'blogs'), blogData);
         setBlogs([...blogs, { id: docRef.id, ...blogData }]);
+        toast.success('Blog created successfully');
       }
       resetForm();
     } catch (err) {
       console.error('Error saving blog:', err);
       setError('Failed to save blog. Please try again later.');
+      toast.error('Failed to save blog');
     } finally {
       setSaving(false);
     }
   };
 
   const resetForm = () => {
-    setNewBlog({ title: '', content: '', images: [] });
+    setNewBlog({ title: '', content: '', category: '', images: [] });
     setImageFiles([]);
     setImageUrls(['']);
     setEditingBlogId(null);
@@ -107,10 +119,12 @@ const ManageBlogs = () => {
 
     try {
       await deleteDoc(doc(db, 'blogs', id));
-      setBlogs(blogs.filter(blog => blog.id !== id));
+      setBlogs(blogs.filter((blog) => blog.id !== id));
+      toast.success('Blog deleted successfully');
     } catch (err) {
       console.error('Error deleting blog:', err);
       setError('Failed to delete blog. Please try again later.');
+      toast.error('Failed to delete blog');
     }
   };
 
@@ -146,14 +160,17 @@ const ManageBlogs = () => {
         } catch (err) {
           console.error('Error uploading image:', err);
           setError('Failed to upload image. Please try again later.');
+          toast.error('Failed to upload image');
         }
       }
     };
   };
 
   const handleAddImageUrlField = () => {
-    if (imageUrls[imageUrls.length - 1].trim() !== '') {
+    if (imageUrls.length === 0 || imageUrls[imageUrls.length - 1]?.trim() !== '') {
       setImageUrls([...imageUrls, '']);
+    } else {
+      toast.error('Please fill in the current URL field before adding a new one.');
     }
   };
 
@@ -168,11 +185,25 @@ const ManageBlogs = () => {
     setImageUrls(newImageUrls);
   };
 
+  const handleAddCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      setCategories([...categories, newCategory.trim()]);
+      setNewCategory('');
+    } else {
+      toast.error('Category is empty or already exists.');
+    }
+  };
+
+  const handleRemoveCategory = (category) => {
+    setCategories(categories.filter((cat) => cat !== category));
+  };
+
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-red-500 text-center mt-20">{error}</div>;
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <ToastContainer />
       <Link to="/dashboard">
         <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
@@ -194,92 +225,150 @@ const ManageBlogs = () => {
           />
         </div>
         <div className="mb-4">
-          <div ref={quillRef} />
+          <label className="block mb-2">Category</label>
+          <select
+            className="input input-bordered w-full"
+            value={newBlog.category}
+            onChange={(e) => setNewBlog({ ...newBlog, category: e.target.value })}
+            required
+          >
+            <option value="" disabled>
+              Select Category
+            </option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+          <div className="mt-4 flex items-center">
+            <input
+              type="text"
+              className="input input-bordered flex-grow"
+              placeholder="Add new category"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+            />
+            <button
+              type="button"
+              className="btn btn-primary ml-2"
+              onClick={handleAddCategory}
+            >
+              Add
+            </button>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <span
+                key={category}
+                className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700"
+              >
+                {category}
+                <button
+                  type="button"
+                  className="ml-2 text-red-500"
+                  onClick={() => handleRemoveCategory(category)}
+                >
+                  &times;
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
         <div className="mb-4">
-          <label className="block mb-2 font-semibold">Upload Cover Images</label>
-          <input
-            type="file"
-            multiple
-            onChange={(e) => setImageFiles(Array.from(e.target.files))}
-            className="input input-bordered w-full"
-          />
+          <label className="block mb-2">Content:</label>
+          <div ref={quillRef} />
+          <button
+            type="button"
+            className="btn btn-secondary mt-2"
+            onClick={handleImageUploadInContent}
+          >
+            Upload Image to Content
+          </button>
+        </div>
+        <div className="flex flex-col border p-5">
+          <h1 className='text-xl mb-5 font-bold'>Upload Image Thumbnail</h1>
+        <div className="mb-4">
+          <label className="block mb-2">Image URLs:</label>
           {imageUrls.map((url, index) => (
-            <div key={index} className="flex items-center space-x-2 mt-2">
+            <div key={index} className="flex items-center mb-2">
               <input
                 type="text"
+                className="input input-bordered flex-grow"
+                placeholder="Image URL"
                 value={url}
                 onChange={(e) => handleImageUrlChange(index, e.target.value)}
-                placeholder="Image URL"
-                className="input input-bordered w-full"
               />
               <button
                 type="button"
+                className="btn btn-danger ml-2"
                 onClick={() => handleRemoveImageUrlField(index)}
-                className="btn btn-danger"
               >
                 Remove
               </button>
-              {index === imageUrls.length - 1 && (
-                <button
-                  type="button"
-                  onClick={handleAddImageUrlField}
-                  className="btn btn-secondary"
-                >
-                  Add URL
-                </button>
-              )}
             </div>
           ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleAddImageUrlField}
+          >
+            Add Another Image URL
+          </button>
         </div>
-        <div className="flex space-x-2">
-          <button type="submit" className="btn btn-primary" disabled={saving}>
-            {saving ? <LoadingSpinner size="sm" /> : editingBlogId ? 'Update Blog' : 'Create Blog'}
+        <div className="mb-4 ">
+          <label className="block mb-2">Upload Images:</label>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => setImageFiles(Array.from(e.target.files))}
+          />
+        </div>
+        </div>
+        <div className="flex justify-between">
+          <button
+            type="submit"
+            className={`btn btn-primary ${saving ? 'loading' : ''}`}
+            disabled={saving}
+          >
+            {saving ? 'Saving...' : 'Save Blog'}
           </button>
           {editingBlogId && (
-            <button type="button" onClick={handleCancelEdit} className="btn btn-secondary">Cancel</button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleCancelEdit}
+            >
+              Cancel
+            </button>
           )}
         </div>
       </form>
 
-      {blogs.length > 0 ? (
-        <ul className="space-y-4">
-          {blogs.map((blog) => (
-            <li key={blog.id} className="bg-white shadow-md rounded-lg p-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">{blog.title}</h2>
-                <div className="space-x-2">
-                  <button
-                    onClick={() => handleEdit(blog)}
-                    className="btn btn-primary"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(blog.id)}
-                    className="btn btn-danger"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-              <div className="flex space-x-2 mt-2">
-                {blog.images && blog.images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`Blog image ${index + 1}`}
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                ))}
-              </div>
-              <div className="text-gray-700 mt-2" dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center mt-10">No blogs found.</p>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {blogs.map((blog) => (
+          <div key={blog.id} className="card p-4 border rounded shadow-sm">
+            <h2 className="text-xl font-semibold mb-2">{blog.title}</h2>
+            <p className="mb-4 text-gray-500">{blog.category}</p>
+            <div dangerouslySetInnerHTML={{ __html: blog.content }} className="mb-4 prose" />
+            <div className="flex justify-between">
+              <button
+                className="btn btn-error"
+                onClick={() => handleEdit(blog)}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => handleDelete(blog.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

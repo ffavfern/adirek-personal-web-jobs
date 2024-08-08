@@ -58,7 +58,7 @@ const Home = () => {
       <CustomCursor />
       <Hero content={heroContent} />
       <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 py-10"
+        className="container mx-auto py-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -75,7 +75,7 @@ const Home = () => {
           <ProjectsType />
         </motion.div>
         
-        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.6 }}>
+        <motion.div className="glass-card hoverable " style={{ opacity, y: yTransform }} transition={{ delay: 0.6 }}>
           <Blog posts={blogPosts} />
         </motion.div>
         

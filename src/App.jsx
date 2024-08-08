@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { QueryClient,QueryClientProvider, } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -17,16 +17,15 @@ import ProjectDetail from './components/ProjectDetail';
 import ProjectOther from './pages/ProjectOther';
 import BlogDetail from './pages/BlogDetail';
 import BlogAll from './pages/BlogAll';
+import NotFound from './pages/NotFound';
 
-const queryClient = new QueryClient()
-
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-
       <AuthProvider>
-        
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -107,13 +106,11 @@ function App() {
             <Route path="/blogs/:id" element={<BlogDetail />} />
             <Route path="/blogs" element={<BlogAll />} />
             <Route path="/projects/:typeKey" element={<ProjectOther />} />
-
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        
+        </BrowserRouter>
       </AuthProvider>
-      </QueryClientProvider>
-
-    
+    </QueryClientProvider>
   );
 }
 

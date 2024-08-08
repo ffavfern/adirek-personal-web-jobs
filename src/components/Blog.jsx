@@ -5,6 +5,7 @@ import { db } from "../firebase";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 
+// ฟังก์ชันสำหรับดึงข้อมูลบล็อกจาก Firestore
 const fetchBlogs = async () => {
   const blogsCollection = await getDocs(collection(db, "blogs"));
   return blogsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -25,16 +26,21 @@ const Blog = () => {
   if (error) return <Error message={error.message} onRetry={refetch} />;
 
   return (
-    <section id="blog" className="text-secondary py-20 px-4 sm:px-6 lg:px-8">
+    <section id="blog" className="text-secondary py-20 px-4 sm:px-6 lg:px-8 text-center">
       <div className="container mx-auto text-start">
         {blogs.length > 0 ? (
           <BlogGrid blogs={blogs} />
         ) : (
-          <div>No blogs available</div>
+          <div className="flex flex-col items-center">
+            <p className="text-lg text-gray-700">No blogs available</p>
+            <Link to="/create-blog" className="mt-4 btn btn-primary">
+              Create New Blog
+            </Link>
+          </div>
         )}
       </div>
       <Link to="/blogs">
-        <div className="btn mt-10 text-primary hover:bg-error hover:text-secondary hover:scale-110 hover:shadow-xl text-lg sm:text-xl uppercase">
+        <div className="btn mt-10  text-primary hover:bg-error hover:text-white hover:scale-110 text-lg sm:text-xl uppercase">
           More Blogs
         </div>
       </Link>
@@ -42,15 +48,18 @@ const Blog = () => {
   );
 };
 
+// คอมโพเนนต์ Loading แสดงสถานะการโหลดข้อมูล
 const Loading = () => (
-  <div className="flex justify-center items-center">
+  <div className="flex justify-center items-center min-h-screen">
     <LoadingSpinner />
+    <p className="ml-2 text-lg text-gray-600">Loading blogs...</p>
   </div>
 );
 
+// คอมโพเนนต์ Error แสดงข้อผิดพลาดพร้อมปุ่ม Retry
 const Error = ({ message, onRetry }) => (
   <div className="flex flex-col items-center text-red-500">
-    <div>Error: {message}</div>
+    <div className="text-lg font-semibold">Error: {message}</div>
     <button
       className="mt-4 btn btn-error text-white"
       onClick={onRetry}
@@ -60,6 +69,7 @@ const Error = ({ message, onRetry }) => (
   </div>
 );
 
+// คอมโพเนนต์ BlogGrid จัดแสดงบล็อกในรูปแบบของการ์ด
 const BlogGrid = ({ blogs }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
     {blogs.map((blog) => (
@@ -69,21 +79,16 @@ const BlogGrid = ({ blogs }) => (
 );
 
 const BlogCard = ({ blog }) => {
-  const truncateContent = (content, maxLength) => {
-    if (content.length <= maxLength) return content;
-    return content.substring(0, maxLength) + "...";
-  };
-
   return (
-    <Link to={`/blog/${blog.id}`} className="block">
+    <Link to={`/blogs/${blog.id}`} className="block">
       <div
-        className="relative p-4 rounded-lg shadow-lg blog-post overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
+        className=" relative p-4 rounded-lg shadow-lg blog-post overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
         style={{
           minHeight: "250px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundImage: `url(${blog.image})`,
+          backgroundImage: `url(${blog.images})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -94,19 +99,16 @@ const BlogCard = ({ blog }) => {
           style={{ zIndex: -1 }}
         ></div>
 
-        <div className="relative z-10">
+        <div className="relative z-10 text-center">
           <h3 className="text-xl sm:text-2xl font-bold text-white uppercase">
             {blog.title}
           </h3>
-          <p className="mt-2 text-sm sm:text-base text-white">
-            {truncateContent(blog.content, 100)}
-          </p>
         </div>
-        <div className="mt-4 flex justify-end relative z-10">
+        <div className="mt-4 flex justify-center relative z-10">
           <span
-            className="flex items-center justify-center w-8 h-8 bg-white rounded-full text-primary"
+            className="flex items-center justify-center px-4 py-2 bg-white rounded-full text-primary font-semibold"
           >
-            →
+            See More
           </span>
         </div>
       </div>

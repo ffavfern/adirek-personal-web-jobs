@@ -1,20 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  
+  const auth = getAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
+
+      if (rememberMe) {
+        localStorage.setItem('userEmail', email);
+      } else {
+        localStorage.removeItem('userEmail');
+      }
+
       navigate('/dashboard');
     } catch (error) {
-      console.error(error.message);
+      console.error('Login failed:', error.message);
     }
   };
 
@@ -39,6 +48,16 @@ const Login = () => {
             className="input input-bordered w-full"
             required
           />
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              id="rememberMe"
+              className="mr-2"
+            />
+            <label htmlFor="rememberMe" className="text-gray-700">Remember Me</label>
+          </div>
           <button type="submit" className="btn btn-primary w-full py-2 sm:py-3">
             Login
           </button>
