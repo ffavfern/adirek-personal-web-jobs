@@ -104,7 +104,7 @@ function App() {
             />
             <Route path="/:id" element={<ProjectDetail />} />
             <Route path="/projects/other" element={<ProjectOther />} />
-            <Route path="/blog/:id" element={<BlogDetail />} />
+            <Route path="/blogs/:id" element={<BlogDetail />} />
             <Route path="/blogs" element={<BlogAll />} />
             <Route path="/projects/:typeKey" element={<ProjectOther />} />
 

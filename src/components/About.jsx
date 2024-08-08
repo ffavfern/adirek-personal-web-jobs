@@ -6,7 +6,7 @@ import { FaDownload } from "react-icons/fa";
 
 const About = () => {
   return (
-    <section className="about flex flex-col justify-center items-center gap-y-20">
+    <section className="about flex flex-col justify-center items-center gap-y-20  ">
       {/* Profile Section */}
       <motion.div
         className="profile items-center flex flex-col w-full md:w-1/3"

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useViewportScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import LoadingSpinner from './LoadingSpinner';
 import './Hero.css';
 
 const Hero = ({ content }) => {
-  const { scrollY } = useViewportScroll();
+  // Replace useViewportScroll with useScroll
+  const { scrollY } = useScroll();
 
   // Parallax effect for text
   const yTransform = useTransform(scrollY, [0, 300], [0, -100]);
