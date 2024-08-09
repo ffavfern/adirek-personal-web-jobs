@@ -5,7 +5,6 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import ManageProjects from "./pages/ManageProjects";
 import ManageBlogs from "./pages/ManageBlogs";
-import ManageAdmin from "./pages/ManageAdmin";
 import ManageHero from "./pages/ManageHero";
 import ManageExperience from "./pages/ManageExperience";
 import ManageEducation from "./pages/ManageEducation";
@@ -53,14 +52,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/dashboard/admin"
-              element={
-                <ProtectedRoute>
-                  <ManageAdmin />
-                </ProtectedRoute>
-              }
-            />
+           
             <Route
               path="/dashboard/hero"
               element={

@@ -4,6 +4,7 @@ import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Link } from 'react-router-dom';
 import ContentCard from '../components/ContentCard';
+import LoadingSpinner from '../components/LoadingSpinner'; // Assuming you have a loading spinner component
 
 const ManageHero = () => {
   const [heroes, setHeroes] = useState([]);
@@ -11,43 +12,49 @@ const ManageHero = () => {
     title: '',
     subtitle: '',
     description: '',
-    imageUrl: '',
   });
   const [editingId, setEditingId] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchHeroes = async () => {
-      const heroesCollection = await getDocs(collection(db, 'hero'));
-      setHeroes(heroesCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setLoading(true);
+      try {
+        const heroesCollection = await getDocs(collection(db, 'hero'));
+        setHeroes(heroesCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      } catch (error) {
+        console.error('Error fetching heroes:', error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchHeroes();
   }, []);
 
-  const handleImageUpload = async (file) => {
-    const storageRef = ref(storage, `hero-images/${file.name}`);
-    await uploadBytes(storageRef, file);
-    return await getDownloadURL(storageRef);
-  };
 
   const handleAddHero = async (e) => {
     e.preventDefault();
-    let imageUrl = newHero.imageUrl;
-    if (imageFile) {
-      imageUrl = await handleImageUpload(imageFile);
-    }
+    setLoading(true);
+    try {
+    
 
-    if (editingId) {
-      const heroDoc = doc(db, 'hero', editingId);
-      await updateDoc(heroDoc, { ...newHero, imageUrl });
-      setEditingId(null);
-    } else {
-      await addDoc(collection(db, 'hero'), { ...newHero, imageUrl });
+      if (editingId) {
+        const heroDoc = doc(db, 'hero', editingId);
+        await updateDoc(heroDoc, { ...newHero });
+        setEditingId(null);
+      } else {
+        await addDoc(collection(db, 'hero'), { ...newHero });
+      }
+
+      setNewHero({ title: '', subtitle: '', description: '' });
+
+      const heroesCollection = await getDocs(collection(db, 'hero'));
+      setHeroes(heroesCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    } catch (error) {
+      console.error('Error adding/updating hero:', error);
+    } finally {
+      setLoading(false);
     }
-    setNewHero({ title: '', subtitle: '', description: '', imageUrl: '' });
-    setImageFile(null);
-    const heroesCollection = await getDocs(collection(db, 'hero'));
-    setHeroes(heroesCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   };
 
   const handleEditHero = (hero) => {
@@ -55,14 +62,20 @@ const ManageHero = () => {
       title: hero.title,
       subtitle: hero.subtitle,
       description: hero.description,
-      imageUrl: hero.imageUrl,
     });
     setEditingId(hero.id);
   };
 
   const handleDeleteHero = async (id) => {
-    await deleteDoc(doc(db, 'hero', id));
-    setHeroes(heroes.filter((hero) => hero.id !== id));
+    setLoading(true);
+    try {
+      await deleteDoc(doc(db, 'hero', id));
+      setHeroes(heroes.filter((hero) => hero.id !== id));
+    } catch (error) {
+      console.error('Error deleting hero:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,6 +84,7 @@ const ManageHero = () => {
       <Link to="/dashboard">
         <button className="btn btn-primary mb-6">Back to Dashboard</button>
       </Link>
+      {loading && <LoadingSpinner />}
       <form onSubmit={handleAddHero} className="space-y-4 mb-8">
         <input
           type="text"
@@ -95,12 +109,8 @@ const ManageHero = () => {
           className="textarea textarea-bordered w-full"
           required
         />
-        <input
-          type="file"
-          onChange={(e) => setImageFile(e.target.files[0])}
-          className="input input-bordered w-full"
-        />
-        <button type="submit" className="btn btn-primary w-full">
+      
+        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
           {editingId ? 'Update Hero' : 'Add Hero'}
         </button>
       </form>

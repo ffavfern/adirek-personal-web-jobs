@@ -5,7 +5,6 @@ import { db } from "../firebase";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 
-// ฟังก์ชันสำหรับดึงข้อมูลบล็อกจาก Firestore
 const fetchBlogs = async () => {
   const blogsCollection = await getDocs(collection(db, "blogs"));
   return blogsCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -26,7 +25,7 @@ const Blog = () => {
   if (error) return <Error message={error.message} onRetry={refetch} />;
 
   return (
-    <section id="blog" className="text-secondary py-20 px-4 sm:px-6 lg:px-8 text-center">
+    <section id="blog" className="text-secondary py-20 mx-20 text-center">
       <div className="container mx-auto text-start">
         {blogs.length > 0 ? (
           <BlogGrid blogs={blogs} />
@@ -48,7 +47,6 @@ const Blog = () => {
   );
 };
 
-// คอมโพเนนต์ Loading แสดงสถานะการโหลดข้อมูล
 const Loading = () => (
   <div className="flex justify-center items-center min-h-screen">
     <LoadingSpinner />
@@ -56,7 +54,6 @@ const Loading = () => (
   </div>
 );
 
-// คอมโพเนนต์ Error แสดงข้อผิดพลาดพร้อมปุ่ม Retry
 const Error = ({ message, onRetry }) => (
   <div className="flex flex-col items-center text-red-500">
     <div className="text-lg font-semibold">Error: {message}</div>
@@ -69,7 +66,6 @@ const Error = ({ message, onRetry }) => (
   </div>
 );
 
-// คอมโพเนนต์ BlogGrid จัดแสดงบล็อกในรูปแบบของการ์ด
 const BlogGrid = ({ blogs }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
     {blogs.map((blog) => (
@@ -82,7 +78,7 @@ const BlogCard = ({ blog }) => {
   return (
     <Link to={`/blogs/${blog.id}`} className="block">
       <div
-        className=" relative p-4 rounded-lg shadow-lg blog-post overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
+        className=" relative p-4  rounded-lg shadow-lg blog-post overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
         style={{
           minHeight: "250px",
           display: "flex",
@@ -92,6 +88,7 @@ const BlogCard = ({ blog }) => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+      
         }}
       >
         <div

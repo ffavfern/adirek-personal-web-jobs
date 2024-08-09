@@ -37,20 +37,20 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+    <div className="container  px-4 sm:px-6 lg:px-8 py-10 sm:py-20 mx-auto lg:mx-20 ">
       {blog && (
         <>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 uppercase text-center sm:text-left animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 sm:mb-10 lg:mb-12 uppercase text-center sm:text-left animate-fade-in">
             {blog.title}
           </h1>
-          <div className="w-full max-w-4xl mx-auto mb-8">
+          <div className="w-full max-w-4xl mx-auto mb-8 lg:mb-10">
             <img
               src={blog.images}
               alt={`Cover image for ${blog.title}`}
               className="w-full h-auto max-h-96 object-cover rounded-lg shadow-2xl transition-transform duration-500 ease-in-out hover:scale-105"
             />
           </div>
-          <div className="prose prose-lg max-w-none text-gray-700 mb-10 leading-relaxed animate-fade-in">
+          <div className="prose prose-lg sm:prose-xl max-w-none text-gray-700 mb-10 lg:mb-12 leading-relaxed animate-fade-in">
             {/* Ensure iframe styling and responsiveness */}
             <div
               dangerouslySetInnerHTML={{

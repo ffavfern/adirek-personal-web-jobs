@@ -110,7 +110,7 @@ const ProjectOther = () => {
         </div>
 
         <div>
-          <label htmlFor="filter" className="block text-xl font-bold mb-2">
+          <label htmlFor="filter" className="block text-xl  font-bold mb-2">
             Filter by Type:
           </label>
           <select
@@ -164,7 +164,7 @@ const ProjectOther = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
               whileHover={{ scale: 1.05 }}
             >
               <Link to={`/${project.id}`}>
@@ -178,14 +178,19 @@ const ProjectOther = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>
                   <div className="absolute inset-0 p-6 flex flex-col justify-end transition-opacity">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-2 text-white uppercase">
+                  
+                    
+                  </div>
+                  
+                </div>
+               <div className="text_detail p-5">
+               <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-2 text-primary uppercase">
                       {project.title}
                     </h3>
-                    <p className="text-md sm:text-lg text-gray-400 uppercase">
+                <p className="text-md sm:text-lg text-gray-400 uppercase">
                       {project.description}
                     </p>
-                  </div>
-                </div>
+               </div>
               </Link>
             </motion.div>
           ))}

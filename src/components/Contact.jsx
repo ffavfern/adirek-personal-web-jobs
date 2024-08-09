@@ -93,20 +93,25 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact-section min-h-screen flex flex-col justify-center items-center bg-gray-100 px-4 sm:px-10 lg:px-20">
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16">
+    <section
+      id="contact"
+      className="contact-section min-h-screen flex flex-col justify-center items-center bg-gray-100 px-10  sm:px-6 md:px-20 lg:px-20 py-10"
+    >
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-16">
         <div className="flex flex-col justify-center text-center lg:text-left mb-8 lg:mb-0">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-light mb-4 sm:mb-6">Let’s collaborate</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-light mb-4 sm:mb-6">Let’s collaborate</h1>
           {error ? (
             <div className="text-red-500">{error}</div>
           ) : (
             <>
-              {loading ? <LoadingSpinner /> : (
+              {loading ? (
+                <LoadingSpinner />
+              ) : (
                 <>
-                  <div className="text-lg mb-4 sm:mb-6">
+                  <div className="text-base sm:text-lg mb-4 sm:mb-6">
                     <p>{contactDetails.email}</p>
                   </div>
-                  <div className="text-sm leading-loose">
+                  <div className="text-sm sm:text-base leading-loose">
                     <p>Find us</p>
                     <p className="mb-4 sm:mb-6">{contactDetails.location}</p>
                     <p>{contactDetails.phone}</p>
@@ -117,8 +122,8 @@ const Contact = () => {
           )}
         </div>
 
-        <div className="flex flex-col justify-center">
-          <h2 className="text-lg font-light mb-4">Say hello</h2>
+        <div className="flex flex-col justify-center py-10">
+          <h2 className="text-base sm:text-lg font-light mb-4">Say hello</h2>
           <form ref={form} onSubmit={sendEmail} className="space-y-4 sm:space-y-6">
             <div className="flex flex-col">
               <label htmlFor="name" className="text-sm uppercase tracking-wide">Name</label>
@@ -128,7 +133,7 @@ const Contact = () => {
                 id="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-1 sm:py-2"
+                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-2"
                 required
               />
             </div>
@@ -141,7 +146,7 @@ const Contact = () => {
                 id="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-1 sm:py-2"
+                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-2"
                 required
               />
             </div>
@@ -154,7 +159,7 @@ const Contact = () => {
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-1 sm:py-2"
+                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-2"
                 required
               />
             </div>
@@ -166,7 +171,7 @@ const Contact = () => {
                 id="message"
                 value={formData.message}
                 onChange={handleChange}
-                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-1 sm:py-2 h-24 sm:h-32"
+                className="border-b border-gray-400 bg-transparent focus:outline-none focus:border-black py-2 h-24 sm:h-28 md:h-32"
                 required
               />
             </div>

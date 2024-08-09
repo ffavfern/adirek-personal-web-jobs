@@ -18,7 +18,6 @@ const Dashboard = () => {
   const buttons = [
     { path: "/dashboard/projects", label: " Projects" },
     { path: "/dashboard/blogs", label: " Blogs" },
-    { path: "/dashboard/admin", label: " Admin" },
     { path: "/dashboard/hero", label: " Hero" },
     { path: "/dashboard/experience", label: " Experience" },
     { path: "/dashboard/education", label: " Education" },

@@ -58,32 +58,32 @@ const Home = () => {
       <CustomCursor />
       <Hero content={heroContent} />
       <motion.div
-        className="container mx-auto py-10"
+        className="container mx-auto py-10 px-4 sm:px-6 lg:px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }}>
+        <motion.div className="glass-card hoverable mx-auto max-w-7xl" style={{ opacity, y: yTransform }}>
           <About content={aboutContent} />
         </motion.div>
         
-        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.2 }}>
+        <motion.div className="glass-card hoverable mt-10 max-w-7xl" style={{ opacity, y: yTransform }} transition={{ delay: 0.2 }}>
           <ProjectSlide id="projectslide" />
         </motion.div>
         
-        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.4 }}>
+        <motion.div className="glass-card hoverable mt-10 max-w-7xl" style={{ opacity, y: yTransform }} transition={{ delay: 0.4 }}>
           <ProjectsType />
         </motion.div>
         
-        <motion.div className="glass-card hoverable " style={{ opacity, y: yTransform }} transition={{ delay: 0.6 }}>
+        <motion.div className="glass-card hoverable mt-10 max-w-7xl" style={{ opacity, y: yTransform }} transition={{ delay: 0.6 }}>
           <Blog posts={blogPosts} />
         </motion.div>
         
         <div className="line_section flex py-20 justify-center">
-          <hr className="w-1/2" />
+          <hr className="w-1/2 sm:w-1/3 lg:w-1/4" />
         </div>
         
-        <motion.div className="glass-card hoverable" style={{ opacity, y: yTransform }} transition={{ delay: 0.8 }}>
+        <motion.div className="glass-card hoverable mt-10 max-w-7xl" style={{ opacity, y: yTransform }} transition={{ delay: 0.8 }}>
           <Testimonials testimonials={testimonials} />
         </motion.div>
       </motion.div>

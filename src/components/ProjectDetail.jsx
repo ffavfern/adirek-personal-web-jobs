@@ -56,9 +56,9 @@ const ProjectDetail = () => {
   }
 
   return (
-    <div className="container mx-auto mb-20">
+    <div className="container mx-auto  mb-20">
       {/* Hero Section */}
-      <div className="relative bg-gray-900 text-white p-6 sm:p-10 shadow-lg mb-8">
+      <div className="relative bg-gray-900 text-white p-6 sm:p-10  shadow-lg mb-8 ">
         {selectedImage && (
           <img 
             src={selectedImage} 
@@ -70,7 +70,7 @@ const ProjectDetail = () => {
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 uppercase">{project.title}</h1>
           
           <Link to="/">
-            <button className="mt-4 bg-error text-white py-2 px-4 sm:px-6 rounded-lg font-semibold hover:bg-error transition duration-300">
+            <button className="mt-4 bg-error text-white py-2 px-4 sm:px-6 lg:px-8 rounded-lg font-semibold hover:bg-error-dark transition duration-300">
               Back to Projects
             </button>
           </Link>
@@ -94,7 +94,7 @@ const ProjectDetail = () => {
                 key={index} 
                 src={image} 
                 alt={`${project.title} - Image ${index + 1}`} 
-                className={`thumbnail-image w-20 h-20 sm:w-24 sm:h-24 rounded-lg shadow-lg cursor-pointer ${selectedImage === image ? 'selected-thumbnail border-2 border-error' : ''}`}
+                className={`thumbnail-image w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg shadow-lg cursor-pointer ${selectedImage === image ? 'selected-thumbnail border-2 border-error' : ''}`}
                 onClick={() => setSelectedImage(image)} 
               />
             ))}
@@ -105,26 +105,26 @@ const ProjectDetail = () => {
       )}
 
       {/* Project Details Section */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg lg:mx-80">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4">Project Details</h2>
-        <p className="text-base sm:text-lg mb-4">{project.description}</p>
+      <div className="bg-white p-4 mx-20 rounded-lg shadow-lg mt-10">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4">Project Details</h2>
+        <p className="text-base sm:text-lg lg:text-xl mb-4">{project.description}</p>
 
         {/* Project Type */}
         <div className="flex items-center mb-4">
-          <FaTag className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-bounce" />
-          <p className="text-base sm:text-lg">Type: <span className="text-gray-700">{project.type || 'N/A'}</span></p>
+          <FaTag className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 mr-2 text-yellow-500 animate-bounce" />
+          <p className="text-base sm:text-lg lg:text-xl">Type: <span className="text-gray-700">{project.type || 'N/A'}</span></p>
         </div>
 
         {/* Project Date */}
         <div className="flex items-center mb-4">
-          <FaCalendarAlt className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-pulse" />
-          <p className="text-base sm:text-lg">Date: <span className="text-gray-700">{project.date || 'N/A'}</span></p>
+          <FaCalendarAlt className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 mr-2 text-yellow-500 animate-pulse" />
+          <p className="text-base sm:text-lg lg:text-xl">Date: <span className="text-gray-700">{project.date || 'N/A'}</span></p>
         </div>
 
         {/* Project Status */}
         <div className="flex items-center mb-4">
-          <FaInfoCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-yellow-500 animate-spin-slow" />
-          <p className="text-base sm:text-lg">Status: <span className="text-gray-700">Ongoing</span></p>
+          <FaInfoCircle className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 mr-2 text-yellow-500 animate-spin-slow" />
+          <p className="text-base sm:text-lg lg:text-xl">Status: <span className="text-gray-700">Ongoing</span></p>
         </div>
       </div>
 
@@ -135,7 +135,7 @@ const ProjectDetail = () => {
             <img 
               src={selectedImage} 
               alt={project.title} 
-              className="w-full h-auto max-h-screen object-cover"
+              className="w-full h-auto max-h-screen object-cover rounded-lg"
             />
             <button 
               onClick={closeModal} 

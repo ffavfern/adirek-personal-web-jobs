@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import ContentCard from '../components/ContentCard';
 import { Link } from 'react-router-dom';
 
@@ -31,7 +31,6 @@ const ManageTestimonials = () => {
 
     let imageUrl = newTestimonial.profileImageUrl;
     if (profileImage) {
-      const storage = getStorage();
       const imageRef = ref(storage, `profileImages/${profileImage.name}`);
       await uploadBytes(imageRef, profileImage);
       imageUrl = await getDownloadURL(imageRef);
@@ -168,6 +167,7 @@ const ManageTestimonials = () => {
               {...testimonial}
               onDelete={() => handleDeleteTestimonial(testimonial.id)}
               onUpdate={() => handleEditTestimonial(testimonial)}
+              profileImageUrl={testimonial.profileImageUrl || ''} // Ensure empty string if no profile image
             />
           ))}
         </div>
