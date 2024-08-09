@@ -1,10 +1,9 @@
-import { setCookie, getCookie } from '../utils/cookies';
+import { setSecureCookie, getCookie } from '../utils/cookies';
 
 export function loginUser(sessionId) {
-    
-    setCookie('userSession', sessionId, 7); 
+  setSecureCookie('userSession', sessionId, 7);
 }
 
 export function getSession() {
-    return getCookie('userSession');
+  return getCookie('userSession');
 }
