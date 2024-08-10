@@ -95,9 +95,9 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="contact-section min-h-screen flex flex-col justify-center items-center bg-gray-100 px-10  sm:px-6 md:px-20 lg:px-20 py-10"
+      className="contact-section min-h-screen flex flex-col justify-center items-center bg-gray-100 md:px-16 lg:px-20 p-10"
     >
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-16">
+      <div className="container grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-16 ">
         <div className="flex flex-col justify-center text-center lg:text-left mb-8 lg:mb-0">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-light mb-4 sm:mb-6">Let’s collaborate</h1>
           {error ? (

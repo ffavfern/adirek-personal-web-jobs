@@ -67,7 +67,7 @@ const ProjectOther = () => {
 
   return (
     <motion.div
-      className="container mx-auto px-4 sm:px-6 lg:px-8"
+      className="container mx-auto px-4 sm:px-6 lg:px-8 my-20"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -155,7 +155,7 @@ const ProjectOther = () => {
         </button>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <AnimatePresence>
           {filteredProjects.map((project, index) => (
             <motion.div

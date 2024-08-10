@@ -69,14 +69,14 @@ const ProjectsType = () => {
   }, []);
 
   return (
-    <section id="projecttype" className="bg-secondary text-primary mx-10">
+    <section id="projecttype" className="bg-secondary text-primary py-20 lg:py-0">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         className=""
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {projectTypes
             .filter((type) => type.count > 0)
             .map((type) => (
@@ -93,7 +93,7 @@ const ProjectCard = ({ type }) => {
 
   return (
     <motion.div
-      className={`relative p-4 sm:p-6 md:p-8 ${type.color} text-secondary rounded-lg shadow-lg flex flex-col lg:h-64 md:h-56`}
+      className={`relative p-4 sm:p-6 md:p-8 ${type.color} text-secondary rounded-lg shadow-lg flex flex-col lg:h-50 md:h-46`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

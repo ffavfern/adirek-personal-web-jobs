@@ -80,7 +80,7 @@ const ProjectDetail = () => {
       {/* Image Gallery Section */}
       {project.images && project.images.length > 0 ? (
         <div className="mb-8">
-          <div className="w-full max-w-3xl mx-auto mb-6 flex justify-center">
+          <div className="w-full max-w-3xl px-10 mb-6 flex justify-center">
             <img 
               src={selectedImage} 
               alt={project.title} 
@@ -105,7 +105,7 @@ const ProjectDetail = () => {
       )}
 
       {/* Project Details Section */}
-      <div className="bg-white p-4 mx-20 rounded-lg shadow-lg mt-10">
+      <div className="bg-white p-4 mx-10 rounded-lg shadow-lg mt-10">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4">Project Details</h2>
         <p className="text-base sm:text-lg lg:text-xl mb-4">{project.description}</p>
 

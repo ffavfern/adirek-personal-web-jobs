@@ -30,7 +30,7 @@ const ProjectSlide = ({ id }) => {
   return (
     <section
       id={id}
-      className="project-slide-section py-10 mx-20"
+      className="project-slide-section py-20 "
     >
       <motion.div
         initial={{ opacity: 0 }}
@@ -73,7 +73,7 @@ const ProjectSlide = ({ id }) => {
           {projects.map((project) => (
             <SwiperSlide
               key={project.id}
-              className="flex items-center justify-center"
+              className="flex items-center justify-center "
             >
               <Link to={`/${project.id}`} className="block w-full h-full">
                 <div className="relative bg-gray-900 rounded-lg shadow-2xl overflow-hidden group">
@@ -81,7 +81,7 @@ const ProjectSlide = ({ id }) => {
                     <img
                       src={project.images[0]}
                       alt={project.title}
-                      className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover transition-transform transform group-hover:scale-105"
+                      className="w-full h-96 sm:h-48 md:h-72 lg:h-80 object-cover transition-transform transform group-hover:scale-105"
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 group-hover:opacity-80 transition-opacity"></div>

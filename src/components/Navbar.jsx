@@ -1,6 +1,6 @@
 function Navbar() {
   return (
-    <nav className="navbar hidden md:flex justify-between w-12 h-1/4 sm:w-14 md:w-16 fixed top-1/3 p-3 sm:p-4 md:p-5 flex-col">
+    <nav className="navbar hidden md:flex justify-between w-12 h-1/4 sm:w-14 md:w-16 fixed top-1/3 p-3 sm:p-4 md:p-5 flex-col z-10">
       <a
         className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-black hover:bg-error active:bg-error transition-all duration-300"
         href="#hero"

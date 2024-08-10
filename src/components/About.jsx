@@ -6,10 +6,10 @@ import { FaDownload } from "react-icons/fa";
 
 const About = () => {
   return (
-    <section className="about flex flex-col justify-center items-center gap-y-20  px-20">
+    <section className="about grid gap-y-20 py-20  ">
       {/* Profile Section */}
       <motion.div
-        className="profile items-center flex flex-col w-full md:w-2/3 lg:w-1/3"
+        className="profile items-center flex flex-col w-full "
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
@@ -17,7 +17,7 @@ const About = () => {
         <img
           src="https://adirek.netlify.app/assets/profile-BgioiZ0C.png"
           alt="profile"
-          className="w-full sm:w-1/2 md:w-3/4 lg:w-full h-auto bg-white rounded-xl shadow-xl mx-auto"
+          className="w-full sm:w-1/2 md:w-3/4 lg:w-1/3 h-auto bg-white rounded-xl shadow-xl mx-auto"
         />
 
         <a href="https://drive.google.com/file/d/1nOr2V0OqJbMxUmQRy1PU33tPAUHmWTBR/preview">
@@ -43,7 +43,7 @@ const About = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-gold uppercase tracking-widest">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-gold uppercase tracking-widest">
             Experience
           </h1>
 
@@ -57,7 +57,7 @@ const About = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-gold uppercase tracking-widest">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-gold uppercase tracking-widest">
           Education
           </h1>
           <Education />

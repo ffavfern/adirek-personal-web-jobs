@@ -32,18 +32,18 @@ const Testimonials = () => {
   }
 
   return (
-    <section id="testimonials" className="bg-secondary py-60  sm:py-20 lg:py-28 xl:py-36 ">
+    <section id="testimonials" className="bg-secondary py-20   ">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 0.5 }}
-        className="container mx-auto px-4 sm:px-6 lg:px-8"
+        className=" "
       >
         <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-6 sm:mb-8 lg:mb-12 text-gold uppercase tracking-widest text-center">
           What Our Clients Say!
         </h2>
         <div className="flex justify-center mb-6 sm:mb-10 lg:mb-12">
-          <hr className="w-10 sm:w-12 lg:w-16 xl:w-20 border-b-4 border-red-500 my-10" />
+          <hr className="w-1/3 sm:w-12 lg:w-16 xl:w-20 border-b-4 border-red-500 " />
         </div>
         <Swiper
           spaceBetween={20}
@@ -74,7 +74,7 @@ const Testimonials = () => {
           }}
         >
           {testimonials.map((testimonial) => (
-            <SwiperSlide key={testimonial.id} className="flex justify-center">
+            <SwiperSlide key={testimonial.id} className=" md:my-10 ">
               <TestimonialCard testimonial={testimonial} />
             </SwiperSlide>
           ))}
